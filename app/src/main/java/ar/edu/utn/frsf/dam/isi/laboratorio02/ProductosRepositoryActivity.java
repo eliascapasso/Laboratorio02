@@ -21,7 +21,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
     private ListView lstProductos;
     private EditText edtProdCantidad;
     private Button btnProdAddPedido;
-    private ProductoRepository productoDAO; //prueba
+    private ProductoRepository productoDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
