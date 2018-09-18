@@ -26,7 +26,8 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
     private ProductoRepository productoDAO;
     private ArrayAdapter<Categoria> adaptadorSpinnerCategorias;
     private ArrayAdapter<Producto> adaptadorListaProductos;
-    private  Categoria catSeleccionada;
+    private Categoria catSeleccionada;
+    private int idProductoSeleccionado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,32 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
         adaptadorSpinnerCategorias = new ArrayAdapter<Categoria>(this, android.R.layout.simple_spinner_item, productoDAO.getCategorias());
         cmbProductosCategoria.setAdapter(adaptadorSpinnerCategorias);
 
-        catSeleccionada = productoDAO.getCategorias().get(1);
+        seleccionCategoria();
+
+        /*setearIDProducto();
+
+        if(lstProductos.getCheckedItemCount() == 0){
+            edtProdCantidad.setEnabled(false);
+            btnProdAddPedido.setEnabled(false);
+        }
+        else{
+            edtProdCantidad.setEnabled(true);
+            btnProdAddPedido.setEnabled(true);
+        }*/
+        //TODO: REVISAR
+    }
+
+    private void setearIDProducto(){
+        btnProdAddPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                idProductoSeleccionado = lstProductos.getCheckedItemPosition();
+            }
+        });
+    }
+
+    private void seleccionCategoria(){
+
         cmbProductosCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
@@ -51,14 +77,14 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
             {
                 catSeleccionada = adaptadorSpinnerCategorias.getItem(position);
 
-                adaptadorListaProductos = new ArrayAdapter<Producto>(ProductosRepositoryActivity.this, android.R.layout.simple_list_item_1, productoDAO.buscarPorCategoria(catSeleccionada));
+                adaptadorListaProductos = new ArrayAdapter<Producto>(ProductosRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, productoDAO.buscarPorCategoria(catSeleccionada));
                 lstProductos.setAdapter(adaptadorListaProductos);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView)
             {
-                //Nada seleccionado
+                catSeleccionada = productoDAO.getCategorias().get(0);
             }
         });
     }

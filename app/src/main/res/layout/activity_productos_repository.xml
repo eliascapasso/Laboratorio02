@@ -24,7 +24,9 @@
     <ListView
         android:id="@+id/lstProductos"
         android:layout_width="match_parent"
-        android:layout_height="384dp" />
+        android:layout_height="384dp"
+        android:choiceMode="singleChoice"
+        android:layout_weight="1"/>
 
     <TextView
         android:id="@+id/cantAPedir"
@@ -38,11 +40,13 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="0"
-        android:inputType="textNoSuggestions|number" />
+        android:inputType="textNoSuggestions|number"
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/btnProdAddPedido"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Agregar" />
+        android:text="Agregar"
+        android:visibility="visible" />
 </LinearLayout>
