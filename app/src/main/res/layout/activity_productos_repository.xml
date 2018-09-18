@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/selecCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar categoría" />
+
+    <Spinner
+        android:id="@+id/cmbProductosCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/listaProductos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lista de productos" />
+
+    <ListView
+        android:id="@+id/lstProductos"
+        android:layout_width="match_parent"
+        android:layout_height="384dp" />
+
+    <TextView
+        android:id="@+id/cantAPedir"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cantidad a pedir" />
+
+    <EditText
+        android:id="@+id/edtProdCantidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="0"
+        android:inputType="textNoSuggestions|number" />
+
+    <Button
+        android:id="@+id/btnProdAddPedido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Agregar" />
+</LinearLayout>
