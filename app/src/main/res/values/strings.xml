@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Laboratorio02</string>
     <string name="main_titulo">Menu de opciones</string>
+
+
+    <string name="pedido_titulo">Datos del Pedido</string>
+    <string name="pedido_lbl_correo">Correo Electrónico</string>
+    <string name="pedido_lbl_modo_entrega">Modo de Entrega</string>
+    <string name="pedido_lbl_direccion">Dirección de envio</string>
+    <string name="pedido_lbl_hora_entrega">Hora Solicitada (hh:mm)</string>
 </resources>
