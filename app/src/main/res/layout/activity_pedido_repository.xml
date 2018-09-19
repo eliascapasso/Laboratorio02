@@ -33,19 +33,20 @@
     <RadioGroup
         android:id="@+id/optPedidoModoEntrega"
         android:layout_width="match_parent"
-        android:layout_height="113dp">
+        android:layout_height="59dp"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/optPedidoRetira"
             android:layout_width="148dp"
-            android:layout_height="4dp"
+            android:layout_height="43dp"
             android:layout_weight="1"
             android:text="Retira en local" />
 
         <RadioButton
             android:id="@+id/optPedidoEnviar"
             android:layout_width="171dp"
-            android:layout_height="1dp"
+            android:layout_height="46dp"
             android:layout_weight="1"
             android:text="Enviar a domicilio" />
 
