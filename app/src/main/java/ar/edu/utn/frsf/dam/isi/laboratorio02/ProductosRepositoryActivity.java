@@ -1,5 +1,6 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -46,30 +47,37 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
 
         seleccionCategoria();
 
-        /*setearIDProducto();
+        setearIDProducto();
 
-        if(lstProductos.getCheckedItemCount() == 0){
-            edtProdCantidad.setEnabled(false);
-            btnProdAddPedido.setEnabled(false);
-        }
-        else{
-            edtProdCantidad.setEnabled(true);
-            btnProdAddPedido.setEnabled(true);
-        }*/
-        //TODO: REVISAR
+        //TODO: NUEVO_PEDIDO con un valor en 1??
+
+        //agregarPedido();
+    }
+
+    private void agregarPedido(){
+        int cantidad = Integer.parseInt(edtProdCantidad.getText().toString());
+        int idProducto = idProductoSeleccionado;
+
+        Intent i = new Intent(); //TODO: aca ver que actividad poner despues
+        i.putExtra("cantidad", cantidad);
+        i.putExtra("idProducto", idProducto);
     }
 
     private void setearIDProducto(){
-        btnProdAddPedido.setOnClickListener(new View.OnClickListener() {
+        lstProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                idProductoSeleccionado = lstProductos.getCheckedItemPosition();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                idProductoSeleccionado = position;
+
+                edtProdCantidad.setEnabled(true);
+                btnProdAddPedido.setEnabled(true);
             }
         });
+
+
     }
 
     private void seleccionCategoria(){
-
         cmbProductosCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
@@ -79,6 +87,12 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
 
                 adaptadorListaProductos = new ArrayAdapter<Producto>(ProductosRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, productoDAO.buscarPorCategoria(catSeleccionada));
                 lstProductos.setAdapter(adaptadorListaProductos);
+
+                //Cada vez que se cambia de categoria, se deshabilita el boton y el editText
+                if(lstProductos.getCheckedItemPosition() == -1){
+                    edtProdCantidad.setEnabled(false);
+                    btnProdAddPedido.setEnabled(false);
+                }
             }
 
             @Override
