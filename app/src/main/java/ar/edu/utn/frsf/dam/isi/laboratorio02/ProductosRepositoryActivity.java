@@ -49,7 +49,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
 
         setearIDProducto();
 
-        //TODO: NUEVO_PEDIDO con un valor en 1?
+        //TODO: NUEVO_PEDIDO con un valor en 1??
 
         //agregarPedido();
     }
@@ -67,7 +67,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
         lstProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                idProductoSeleccionado = position;
+                idProductoSeleccionado = productoDAO.buscarPorCategoria(catSeleccionada).get(position).getId();
 
                 edtProdCantidad.setEnabled(true);
                 btnProdAddPedido.setEnabled(true);
