@@ -12,10 +12,12 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.PedidoDetalle;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
 
 public class ProductosRepositoryActivity extends AppCompatActivity {
@@ -29,6 +31,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
     private ArrayAdapter<Producto> adaptadorListaProductos;
     private Categoria catSeleccionada;
     private int idProductoSeleccionado;
+    //public List<PedidoDetalle> listaPedidoDetalle = new ArrayList<PedidoDetalle>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +54,19 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
 
         //TODO: NUEVO_PEDIDO con un valor en 1??
 
-        //agregarPedido();
+        agregarPedido();
     }
 
     private void agregarPedido(){
         int cantidad = Integer.parseInt(edtProdCantidad.getText().toString());
         int idProducto = idProductoSeleccionado;
 
-        Intent i = new Intent(); //TODO: aca ver que actividad poner despues
-        i.putExtra("cantidad", cantidad);
-        i.putExtra("idProducto", idProducto);
+        //listaPedidoDetalle.add(new PedidoDetalle(cantidad, productoDAO.buscarPorId(idProducto)));
+
+        Intent i = new Intent(this, PedidoRepositoryActivity.class);
+        /*i.putExtra("cantidad", cantidad);
+        i.putExtra("idProducto", idProducto);*/
+        startActivity(i);
     }
 
     private void setearIDProducto(){
@@ -73,8 +79,6 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
                 btnProdAddPedido.setEnabled(true);
             }
         });
-
-
     }
 
     private void seleccionCategoria(){

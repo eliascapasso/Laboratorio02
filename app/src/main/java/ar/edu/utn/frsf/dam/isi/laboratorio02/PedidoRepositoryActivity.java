@@ -1,17 +1,25 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.PedidoDetalle;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
 
 public class PedidoRepositoryActivity extends AppCompatActivity {
 
@@ -27,9 +35,12 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     private Button btnHacerPedido;
     private Button btnVolver;
 
-    private Pedido unPedido;
-    private PedidoRepository repositorioPedido;
-    private ProductoRepository repositorioProducto;
+    private Pedido unPedido = new Pedido();
+    private PedidoRepository repositorioPedido = new PedidoRepository();
+    private ProductoRepository repositorioProducto = new ProductoRepository();
+    private ArrayAdapter<PedidoDetalle> adaptadorListaPedidos;
+    private List<PedidoDetalle> listaPedidoDetalle = new ArrayList<PedidoDetalle>();
+    //private PedidoRepositoryActivity pedidoActivity = new PedidoRepositoryActivity();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,5 +73,41 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
             }
         });
 
+        /*btnAddProducto.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                Intent productosActivity = new Intent(PedidoRepositoryActivity.this, ProductosRepositoryActivity.class);
+                startActivity(productosActivity);
+            }
+        });
+
+        recibirDatos();
+
+        mostrarListaProductosPedidos();*/
+    }
+
+    private void mostrarListaProductosPedidos(){
+        lstPedidos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                adaptadorListaPedidos = new ArrayAdapter<PedidoDetalle>(PedidoRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, listaPedidoDetalle);
+                lstPedidos.setAdapter(adaptadorListaPedidos);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView)
+            {
+                //nada
+            }
+        });
+    }
+
+    private void recibirDatos(){
+        Bundle extras = getIntent().getExtras();
+        int cantidadProducto = Integer.parseInt(extras.getString("cantidad"));
+        Producto producto = repositorioProducto.buscarPorId(Integer.parseInt(extras.getString("idProducto")));
+        listaPedidoDetalle.add(new PedidoDetalle(cantidadProducto, producto));
     }
 }
