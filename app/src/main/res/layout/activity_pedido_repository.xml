@@ -85,13 +85,13 @@
     <ListView
         android:id="@+id/lstPedidoItems"
         android:layout_width="match_parent"
-        android:layout_height="141dp">
+        android:layout_height="71dp">
 
     </ListView>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="53dp"
         android:orientation="horizontal">
 
         <Button

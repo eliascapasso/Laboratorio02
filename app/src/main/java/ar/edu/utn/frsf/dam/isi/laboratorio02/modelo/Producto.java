@@ -10,6 +10,10 @@ public class Producto {
     private Double precio;
     private Categoria categoria;
 
+    public  Producto(){
+
+    }
+
     public Producto(String nombre, String descripcion, Double precio, Categoria categoria) {
         this.nombre = nombre;
         this.descripcion = descripcion;

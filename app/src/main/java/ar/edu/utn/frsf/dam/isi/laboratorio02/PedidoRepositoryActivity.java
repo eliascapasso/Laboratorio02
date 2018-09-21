@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,6 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     private ProductoRepository repositorioProducto = new ProductoRepository();
     private ArrayAdapter<PedidoDetalle> adaptadorListaPedidos;
     private List<PedidoDetalle> listaPedidoDetalle = new ArrayList<PedidoDetalle>();
-    //private PedidoRepositoryActivity pedidoActivity = new PedidoRepositoryActivity();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,42 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         btnHacerPedido = (Button) findViewById(R.id.btnPedidoHacerPedido);
         btnVolver = (Button) findViewById(R.id.btnPedidoVolver);
 
+        deshabilitaDireccionSiRetira();
+
+        //Apreta el boton "Agregar producto"
+        btnAddProducto.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                Intent i = new Intent(PedidoRepositoryActivity.this, ProductosRepositoryActivity.class);
+                startActivity(i);
+                i.putExtra("bandera", true);
+
+                recibirDatos();
+            }
+        });
+
+        /*listaPedidoDetalle.add(new PedidoDetalle(3, new Producto()));
+
+        adaptadorListaPedidos = new ArrayAdapter<PedidoDetalle>(PedidoRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, listaPedidoDetalle);
+        lstPedidos.setAdapter(adaptadorListaPedidos);
+
+        lstPedidos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView)
+            {
+                //nada
+            }
+        });*/ //TODO: revisar
+    }
+
+    private void deshabilitaDireccionSiRetira(){
         edtDireccion.setEnabled(false);
         rgOptEntrega.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
@@ -70,36 +106,6 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
                 else{
                     edtDireccion.setEnabled(false);
                 }
-            }
-        });
-
-        /*btnAddProducto.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v)
-            {
-                Intent productosActivity = new Intent(PedidoRepositoryActivity.this, ProductosRepositoryActivity.class);
-                startActivity(productosActivity);
-            }
-        });
-
-        recibirDatos();
-
-        mostrarListaProductosPedidos();*/
-    }
-
-    private void mostrarListaProductosPedidos(){
-        lstPedidos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
-            {
-                adaptadorListaPedidos = new ArrayAdapter<PedidoDetalle>(PedidoRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, listaPedidoDetalle);
-                lstPedidos.setAdapter(adaptadorListaPedidos);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView)
-            {
-                //nada
             }
         });
     }

@@ -31,7 +31,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
     private ArrayAdapter<Producto> adaptadorListaProductos;
     private Categoria catSeleccionada;
     private int idProductoSeleccionado;
-    //public List<PedidoDetalle> listaPedidoDetalle = new ArrayList<PedidoDetalle>();
+    public List<PedidoDetalle> listaPedidoDetalle = new ArrayList<PedidoDetalle>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,19 +54,40 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
 
         //TODO: NUEVO_PEDIDO con un valor en 1??
 
+        recibirDatos();
+
         agregarPedido();
     }
 
+    private void recibirDatos(){
+        Bundle extras = getIntent().getExtras(); //TODO: extra null
+        boolean bandera = extras.getBoolean("bandera");
+
+        if(bandera){
+            edtProdCantidad.setEnabled(true);
+            btnProdAddPedido.setEnabled(true);
+        }
+        else{
+            edtProdCantidad.setEnabled(false);
+            btnProdAddPedido.setEnabled(false);
+        }
+    }
+
     private void agregarPedido(){
-        int cantidad = Integer.parseInt(edtProdCantidad.getText().toString());
-        int idProducto = idProductoSeleccionado;
+        btnProdAddPedido.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                int cantidad = Integer.parseInt(edtProdCantidad.getText().toString());
+                int idProducto = idProductoSeleccionado;
 
-        //listaPedidoDetalle.add(new PedidoDetalle(cantidad, productoDAO.buscarPorId(idProducto)));
+                listaPedidoDetalle.add(new PedidoDetalle(cantidad, productoDAO.buscarPorId(idProducto)));
 
-        Intent i = new Intent(this, PedidoRepositoryActivity.class);
-        /*i.putExtra("cantidad", cantidad);
-        i.putExtra("idProducto", idProducto);*/
-        startActivity(i);
+                Intent i = new Intent(ProductosRepositoryActivity.this, PedidoRepositoryActivity.class);
+                i.putExtra("cantidad", cantidad);
+                i.putExtra("idProducto", idProducto);
+                startActivity(i);
+            }
+        });
     }
 
     private void setearIDProducto(){
