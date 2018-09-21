@@ -31,22 +31,17 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
     private ArrayAdapter<Producto> adaptadorListaProductos;
     private Categoria catSeleccionada;
     private int idProductoSeleccionado;
-    public List<PedidoDetalle> listaPedidoDetalle = new ArrayList<PedidoDetalle>();
+    private boolean bandera; //false si viene desde el menu principal, true si viene desde la pantalla de un nuevo pedido
+    public List<PedidoDetalle> listaPedidoDetalle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productos_repository);
 
-        cmbProductosCategoria = (Spinner) findViewById(R.id.cmbProductosCategoria);
-        lstProductos = (ListView) findViewById(R.id.lstProductos);
-        edtProdCantidad = (EditText) findViewById(R.id.edtProdCantidad);
-        btnProdAddPedido = (Button) findViewById(R.id.btnProdAddPedido);
+        inicializaAtributos();
 
-        productoDAO = new ProductoRepository();
-
-        adaptadorSpinnerCategorias = new ArrayAdapter<Categoria>(this, android.R.layout.simple_spinner_item, productoDAO.getCategorias());
-        cmbProductosCategoria.setAdapter(adaptadorSpinnerCategorias);
+        setearAdaptador();
 
         seleccionCategoria();
 
@@ -59,47 +54,19 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
         agregarPedido();
     }
 
-    private void recibirDatos(){
-        Bundle extras = getIntent().getExtras(); //TODO: extra null
-        boolean bandera = extras.getBoolean("bandera");
+    private void inicializaAtributos(){
+        cmbProductosCategoria = (Spinner) findViewById(R.id.cmbProductosCategoria);
+        lstProductos = (ListView) findViewById(R.id.lstProductos);
+        edtProdCantidad = (EditText) findViewById(R.id.edtProdCantidad);
+        btnProdAddPedido = (Button) findViewById(R.id.btnProdAddPedido);
 
-        if(bandera){
-            edtProdCantidad.setEnabled(true);
-            btnProdAddPedido.setEnabled(true);
-        }
-        else{
-            edtProdCantidad.setEnabled(false);
-            btnProdAddPedido.setEnabled(false);
-        }
+        productoDAO = new ProductoRepository();
+        listaPedidoDetalle = new ArrayList<PedidoDetalle>();
     }
 
-    private void agregarPedido(){
-        btnProdAddPedido.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v)
-            {
-                int cantidad = Integer.parseInt(edtProdCantidad.getText().toString());
-                int idProducto = idProductoSeleccionado;
-
-                listaPedidoDetalle.add(new PedidoDetalle(cantidad, productoDAO.buscarPorId(idProducto)));
-
-                Intent i = new Intent(ProductosRepositoryActivity.this, PedidoRepositoryActivity.class);
-                i.putExtra("cantidad", cantidad);
-                i.putExtra("idProducto", idProducto);
-                startActivity(i);
-            }
-        });
-    }
-
-    private void setearIDProducto(){
-        lstProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                idProductoSeleccionado = productoDAO.buscarPorCategoria(catSeleccionada).get(position).getId();
-
-                edtProdCantidad.setEnabled(true);
-                btnProdAddPedido.setEnabled(true);
-            }
-        });
+    private void setearAdaptador(){
+        adaptadorSpinnerCategorias = new ArrayAdapter<Categoria>(this, android.R.layout.simple_spinner_item, productoDAO.getCategorias());
+        cmbProductosCategoria.setAdapter(adaptadorSpinnerCategorias);
     }
 
     private void seleccionCategoria(){
@@ -124,6 +91,61 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parentView)
             {
                 catSeleccionada = productoDAO.getCategorias().get(0);
+            }
+        });
+    }
+
+    private void setearIDProducto(){
+        lstProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                idProductoSeleccionado = productoDAO.buscarPorCategoria(catSeleccionada).get(position).getId();
+
+                if(bandera){
+                    edtProdCantidad.setEnabled(true);
+                    btnProdAddPedido.setEnabled(true);
+                }
+            }
+        });
+    }
+
+    private void recibirDatos(){
+        Bundle extras = getIntent().getExtras();
+        bandera = extras.getBoolean("bandera");
+
+        //false si viene desde el menu principal, true si viene desde la pantalla de un nuevo pedido
+        if(bandera){
+            edtProdCantidad.setEnabled(true);
+            btnProdAddPedido.setEnabled(true);
+        }
+        else{
+            edtProdCantidad.setEnabled(false);
+            btnProdAddPedido.setEnabled(false);
+        }
+    }
+
+    private void agregarPedido(){
+        btnProdAddPedido.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                int cantidad;
+
+                //Si no setea ninguna cantidad
+                if(edtProdCantidad == null){
+                    cantidad = 1;
+                }
+                else{
+                    cantidad = Integer.parseInt(edtProdCantidad.getText().toString());
+                }
+
+                int idProducto = idProductoSeleccionado;
+
+                Intent pedidoActivity = new Intent();
+                pedidoActivity.putExtra("cantidad", cantidad);
+                pedidoActivity.putExtra("idProducto", idProducto);
+                pedidoActivity.putExtra("bandera", true);
+                setResult(ProductosRepositoryActivity.RESULT_OK, pedidoActivity);
+                finish();
             }
         });
     }

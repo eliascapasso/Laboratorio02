@@ -36,17 +36,25 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     private Button btnHacerPedido;
     private Button btnVolver;
 
-    private Pedido unPedido = new Pedido();
-    private PedidoRepository repositorioPedido = new PedidoRepository();
-    private ProductoRepository repositorioProducto = new ProductoRepository();
+    private Pedido unPedido;
+    private PedidoRepository repositorioPedido;
+    private ProductoRepository repositorioProducto;
     private ArrayAdapter<PedidoDetalle> adaptadorListaPedidos;
-    private List<PedidoDetalle> listaPedidoDetalle = new ArrayList<PedidoDetalle>();
+    private List<PedidoDetalle> listaPedidoDetalle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedido_repository);
 
+        inicializaAtributos();
+
+        deshabilitaDireccionSiRetira();
+
+        agregarProducto();
+    }
+
+    private void inicializaAtributos(){
         edtMail = (EditText) findViewById(R.id.editPedidoCorreo);
         rgOptEntrega = (RadioGroup)findViewById(R.id.optPedidoModoEntrega);
         optRetira = (RadioButton) findViewById(R.id.optPedidoRetira);
@@ -59,39 +67,10 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         btnHacerPedido = (Button) findViewById(R.id.btnPedidoHacerPedido);
         btnVolver = (Button) findViewById(R.id.btnPedidoVolver);
 
-        deshabilitaDireccionSiRetira();
-
-        //Apreta el boton "Agregar producto"
-        btnAddProducto.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v)
-            {
-                Intent i = new Intent(PedidoRepositoryActivity.this, ProductosRepositoryActivity.class);
-                startActivity(i);
-                i.putExtra("bandera", true);
-
-                recibirDatos();
-            }
-        });
-
-        /*listaPedidoDetalle.add(new PedidoDetalle(3, new Producto()));
-
-        adaptadorListaPedidos = new ArrayAdapter<PedidoDetalle>(PedidoRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, listaPedidoDetalle);
-        lstPedidos.setAdapter(adaptadorListaPedidos);
-
-        lstPedidos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
-            {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView)
-            {
-                //nada
-            }
-        });*/ //TODO: revisar
+        unPedido = new Pedido();
+        repositorioPedido = new PedidoRepository();
+        repositorioProducto = new ProductoRepository();
+        listaPedidoDetalle = new ArrayList<PedidoDetalle>();
     }
 
     private void deshabilitaDireccionSiRetira(){
@@ -110,10 +89,37 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         });
     }
 
-    private void recibirDatos(){
-        Bundle extras = getIntent().getExtras();
-        int cantidadProducto = Integer.parseInt(extras.getString("cantidad"));
-        Producto producto = repositorioProducto.buscarPorId(Integer.parseInt(extras.getString("idProducto")));
-        listaPedidoDetalle.add(new PedidoDetalle(cantidadProducto, producto));
+    private void agregarProducto(){
+        btnAddProducto.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                Intent productosActivity = new Intent(PedidoRepositoryActivity.this, ProductosRepositoryActivity.class);
+                productosActivity.putExtra("bandera", true);
+                startActivityForResult(productosActivity, 0);
+            }
+        });
+    }
+
+    private void setearAdaptador(){
+        adaptadorListaPedidos = new ArrayAdapter<PedidoDetalle>(PedidoRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, listaPedidoDetalle);
+        lstPedidos.setAdapter(adaptadorListaPedidos);
+    }
+
+    //Se llama a este método cuando finaliza la segunda actividad (productosRepositoryActivity)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // check that it is the SecondActivity with an OK result
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) { // Activity.RESULT_OK
+
+                int cantidadProducto = data.getIntExtra("cantidad", 1);
+                Producto producto = repositorioProducto.buscarPorId(data.getIntExtra("idProducto", 1));
+                listaPedidoDetalle.add(new PedidoDetalle(cantidadProducto, producto));
+
+                setearAdaptador();
+            }
+        }
     }
 }

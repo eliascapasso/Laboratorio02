@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, PedidoRepositoryActivity.class);
+                i.putExtra("bandera", false);
                 startActivity(i);
             }
         });
@@ -42,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, ProductosRepositoryActivity.class);
-                startActivity(i);
                 i.putExtra("bandera", false);
+                startActivity(i);
             }
         });
     }
