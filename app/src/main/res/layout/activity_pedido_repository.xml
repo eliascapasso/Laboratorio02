@@ -81,13 +81,11 @@
         android:hint="00:00"
         android:inputType="textNoSuggestions|number"
         android:visibility="visible" />
-
     <ListView
         android:id="@+id/lstPedidoItems"
         android:layout_width="match_parent"
-        android:layout_height="97dp">
-
-    </ListView>
+        android:layout_height="97dp"
+        android:choiceMode="singleChoice"/>
 
     <LinearLayout
         android:layout_width="match_parent"

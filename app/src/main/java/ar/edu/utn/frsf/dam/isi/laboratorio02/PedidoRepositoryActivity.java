@@ -41,6 +41,7 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     private ProductoRepository repositorioProducto;
     private ArrayAdapter<PedidoDetalle> adaptadorListaPedidos;
     private List<PedidoDetalle> listaPedidoDetalle;
+    private int posicionProductoSeleccionado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,10 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         deshabilitaDireccionSiRetira();
 
         agregarProducto();
+
+        quitarProducto();
+
+        volver();
     }
 
     private void inicializaAtributos(){
@@ -96,6 +101,34 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
                 Intent productosActivity = new Intent(PedidoRepositoryActivity.this, ProductosRepositoryActivity.class);
                 productosActivity.putExtra("bandera", true);
                 startActivityForResult(productosActivity, 0);
+            }
+        });
+    }
+
+    private void quitarProducto(){
+
+        lstPedidos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                posicionProductoSeleccionado = position;
+
+                btnQuitarProducto.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v)
+                    {
+                        listaPedidoDetalle.remove(posicionProductoSeleccionado);
+                        adaptadorListaPedidos.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+    }
+
+    private void volver(){
+        btnVolver.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                Intent mainActivity = new Intent(PedidoRepositoryActivity.this, MainActivity.class);
+                startActivity(mainActivity);
             }
         });
     }
