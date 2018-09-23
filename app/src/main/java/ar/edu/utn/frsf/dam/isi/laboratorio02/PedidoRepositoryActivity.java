@@ -58,6 +58,8 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
 
         quitarProducto();
 
+        hacerPedido();
+
         volver();
     }
 
@@ -136,6 +138,15 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         }
 
         lblCostoTotalPedido.setText("Total pedido: $" + costoTotal);
+    }
+
+    private void hacerPedido(){
+        btnHacerPedido.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                //TODO: implementar
+            }
+        });
     }
 
     private void volver(){
