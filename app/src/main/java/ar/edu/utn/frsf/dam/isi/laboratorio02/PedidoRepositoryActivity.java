@@ -102,7 +102,6 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         });
     }
 
-
     private void agregarProducto(){
         btnAddProducto.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
@@ -144,51 +143,53 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         lblCostoTotalPedido.setText("Total pedido: $" + costoTotal);
     }
 
-
-
-// Hacer pedido, punto 3-i
-    //TODO: se tilda
     private void hacerPedido() {
         btnHacerPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String[] horaIngresada = edtHoraSolicitada.getText().toString().split(":");
                 GregorianCalendar hora = new GregorianCalendar();
-                int valorHora = Integer.valueOf(horaIngresada[0]);
-                int valorMinuto = Integer.valueOf(horaIngresada[1]);
-                if (valorHora < 0 || valorHora > 23) {
-                    Toast.makeText(PedidoRepositoryActivity.this, "La hora ingresada (" + valorHora + " es incorrecta", Toast.LENGTH_LONG).show();
-                    return;
+
+                if(validarDatosHora(horaIngresada, hora) && validarDatosEmailHacerPedido()){
+                    setearDatosPedido(hora);
+
+                    repositorioPedido.guardarPedido(unPedido);
+                    Log.d("APP_LAB02", "Pedido realizado: " + unPedido.toString());
+                    // lo seteamos a una nueva instancia para el proximo pedido
+                    unPedido = new Pedido();
+                    Log.d("APP_LAB02", "Pedido nuevo: " + unPedido.toString());
+
+                    Intent historialPedidoActivity = new Intent(PedidoRepositoryActivity.this, HistorialPedidoActivity.class);
+                    startActivity(historialPedidoActivity);
                 }
-                if (valorMinuto < 0 || valorMinuto > 59) {
-                    Toast.makeText(PedidoRepositoryActivity.this, "Los minutos (" + valorMinuto + " son incorrectos", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                hora.set(Calendar.HOUR_OF_DAY, valorHora);
-                hora.set(Calendar.MINUTE, valorMinuto);
-                hora.set(Calendar.SECOND, Integer.valueOf(0));
-                unPedido.setFecha(hora.getTime());
-                // setear el resto de los atributos del pedido
-                repositorioPedido.guardarPedido(unPedido);
-                // lo seteamos a una nueva instancia para el proximo pedido
-                unPedido = new Pedido();
-                Log.d("APP_LAB02", "Pedido " + unPedido.toString());
-
-
-                if (validarDatosEmailHacerPedido()) {
-
-                } else{
-                    btnHacerPedido.setEnabled(false);
-                    Toast.makeText(PedidoRepositoryActivity.this, "Todos los datos son abligatorios", Toast.LENGTH_LONG).show();
+                else{
+                    Toast.makeText(PedidoRepositoryActivity.this, "Campos inválidos", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
+    private boolean validarDatosHora(String[] horaIngresada, GregorianCalendar hora){
+        if((edtHoraSolicitada.getText().toString().length() != 0) && validarDatosEmailHacerPedido()){
+            int valorHora = Integer.valueOf(horaIngresada[0]);
+            int valorMinuto = Integer.valueOf(horaIngresada[1]);
+            if (valorHora < 0 || valorHora > 23) {
+                return false;
+            }else if (valorMinuto < 0 || valorMinuto > 59) {
+                return false;
+            }
 
+            hora.set(Calendar.HOUR_OF_DAY, valorHora);
+            hora.set(Calendar.MINUTE, valorMinuto);
+            hora.set(Calendar.SECOND, Integer.valueOf(0));
 
-    //Validacion de datos
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     private boolean validarDatosEmailHacerPedido() {
         boolean bandera = true;
 
@@ -200,8 +201,6 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         }
         return bandera;
     }
-
-
 
     private void volver(){
         btnVolver.setOnClickListener(new View.OnClickListener() {
@@ -216,6 +215,15 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     private void setearAdaptador(){
         adaptadorListaPedidos = new ArrayAdapter<PedidoDetalle>(PedidoRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, listaPedidoDetalle);
         lstPedidos.setAdapter(adaptadorListaPedidos);
+    }
+
+    private void setearDatosPedido(GregorianCalendar hora){
+        unPedido.setFecha(hora.getTime());
+        unPedido.setEstado(Pedido.Estado.REALIZADO);
+        unPedido.setDireccionEnvio(edtDireccion.getText().toString());
+        unPedido.setMailContacto(edtMail.getText().toString());
+        unPedido.setDetalle(listaPedidoDetalle);
+        unPedido.setRetirar(optRetira.isChecked());
     }
 
     //Se llama a este método cuando finaliza la segunda actividad (productosRepositoryActivity)
