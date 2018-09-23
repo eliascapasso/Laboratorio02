@@ -217,7 +217,7 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         lstPedidos.setAdapter(adaptadorListaPedidos);
     }
 
-    private void setearDatosPedido(GregorianCalendar hora){
+    public void setearDatosPedido(GregorianCalendar hora){
         unPedido.setFecha(hora.getTime());
         unPedido.setEstado(Pedido.Estado.REALIZADO);
         unPedido.setDireccionEnvio(edtDireccion.getText().toString());
