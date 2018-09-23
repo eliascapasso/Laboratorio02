@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     private Button btnQuitarProducto;
     private Button btnHacerPedido;
     private Button btnVolver;
+    private TextView lblCostoTotalPedido;
 
     private Pedido unPedido;
     private PedidoRepository repositorioPedido;
@@ -71,6 +73,7 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         btnQuitarProducto = (Button) findViewById(R.id.btnPedidoQuitarProducto);
         btnHacerPedido = (Button) findViewById(R.id.btnPedidoHacerPedido);
         btnVolver = (Button) findViewById(R.id.btnPedidoVolver);
+        lblCostoTotalPedido = (TextView)findViewById(R.id.lblCostoTotalPedido);
 
         unPedido = new Pedido();
         repositorioPedido = new PedidoRepository();
@@ -117,10 +120,22 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
                     {
                         listaPedidoDetalle.remove(posicionProductoSeleccionado);
                         adaptadorListaPedidos.notifyDataSetChanged();
+
+                        mostrarCostoTotalPedido();
                     }
                 });
             }
         });
+    }
+
+    private void mostrarCostoTotalPedido(){
+        double costoTotal = 0.0;
+
+        for (PedidoDetalle pedidodetalle: listaPedidoDetalle) {
+                  costoTotal += repositorioProducto.buscarPorId(pedidodetalle.getId()).getPrecio() * pedidodetalle.getCantidad();
+        }
+
+        lblCostoTotalPedido.setText("Total pedido: $" + costoTotal);
     }
 
     private void volver(){
@@ -147,11 +162,16 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) { // Activity.RESULT_OK
 
+                //Ejercicio h
                 int cantidadProducto = data.getIntExtra("cantidad", 1);
                 Producto producto = repositorioProducto.buscarPorId(data.getIntExtra("idProducto", 1));
-                listaPedidoDetalle.add(new PedidoDetalle(cantidadProducto, producto));
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(cantidadProducto, producto);
+                pedidoDetalle.setPedido(unPedido); //TODO: revisar
+                listaPedidoDetalle.add(pedidoDetalle);
 
                 setearAdaptador();
+
+                mostrarCostoTotalPedido();
             }
         }
     }

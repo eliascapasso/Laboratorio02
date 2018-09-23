@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
     private ListView lstProductos;
     private EditText edtProdCantidad;
     private Button btnProdAddPedido;
-    private ProductoRepository productoDAO;
+    private ProductoRepository repositorioProductos;
     private ArrayAdapter<Categoria> adaptadorSpinnerCategorias;
     private ArrayAdapter<Producto> adaptadorListaProductos;
     private Categoria catSeleccionada;
@@ -60,12 +59,12 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
         edtProdCantidad = (EditText) findViewById(R.id.edtProdCantidad);
         btnProdAddPedido = (Button) findViewById(R.id.btnProdAddPedido);
 
-        productoDAO = new ProductoRepository();
+        repositorioProductos = new ProductoRepository();
         listaPedidoDetalle = new ArrayList<PedidoDetalle>();
     }
 
     private void setearAdaptador(){
-        adaptadorSpinnerCategorias = new ArrayAdapter<Categoria>(this, android.R.layout.simple_spinner_item, productoDAO.getCategorias());
+        adaptadorSpinnerCategorias = new ArrayAdapter<Categoria>(this, android.R.layout.simple_spinner_item, repositorioProductos.getCategorias());
         cmbProductosCategoria.setAdapter(adaptadorSpinnerCategorias);
     }
 
@@ -77,7 +76,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
             {
                 catSeleccionada = adaptadorSpinnerCategorias.getItem(position);
 
-                adaptadorListaProductos = new ArrayAdapter<Producto>(ProductosRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, productoDAO.buscarPorCategoria(catSeleccionada));
+                adaptadorListaProductos = new ArrayAdapter<Producto>(ProductosRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, repositorioProductos.buscarPorCategoria(catSeleccionada));
                 lstProductos.setAdapter(adaptadorListaProductos);
 
                 //Cada vez que se cambia de categoria, se deshabilita el boton y el editText
@@ -90,7 +89,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parentView)
             {
-                catSeleccionada = productoDAO.getCategorias().get(0);
+                catSeleccionada = repositorioProductos.getCategorias().get(0);
             }
         });
     }
@@ -99,7 +98,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
         lstProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                idProductoSeleccionado = productoDAO.buscarPorCategoria(catSeleccionada).get(position).getId();
+                idProductoSeleccionado = repositorioProductos.buscarPorCategoria(catSeleccionada).get(position).getId();
 
                 if(bandera){
                     edtProdCantidad.setEnabled(true);

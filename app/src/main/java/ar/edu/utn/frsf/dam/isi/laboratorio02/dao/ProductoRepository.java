@@ -23,7 +23,7 @@ public class ProductoRepository{
             CATEGORIAS_PRODUCTOS.add(new Categoria(2,"Plato Principal"));
             CATEGORIAS_PRODUCTOS.add(new Categoria(3,"Postre"));
             CATEGORIAS_PRODUCTOS.add(new Categoria(4,"Bebida"));
-        for(Categoria cat: CATEGORIAS_PRODUCTOS){
+        for(Categoria cat: CATEGORIAS_PRODUCTOS){ //TODO: Esto esta bien?? (el precio tira cualquiera)
             for(int i=0;i<25;i++){
                 LISTA_PRODUCTOS.add(new Producto(id++,cat.getNombre()+" 1"+i,"descripcion "+(i*id)+rand.nextInt(100),rand.nextDouble()*500,cat));
             }
