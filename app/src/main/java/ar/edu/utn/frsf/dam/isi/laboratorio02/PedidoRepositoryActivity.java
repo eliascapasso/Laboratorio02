@@ -47,6 +47,7 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     private ArrayAdapter<PedidoDetalle> adaptadorListaPedidos;
     private List<PedidoDetalle> listaPedidoDetalle;
     private int posicionProductoSeleccionado;
+    private boolean bandera; //True si proviene del historial de pedidos, False si proviene del menu principal
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,34 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         repositorioPedido = new PedidoRepository();
         repositorioProducto = new ProductoRepository();
         listaPedidoDetalle = new ArrayList<PedidoDetalle>();
+
+        inicializaDatosPedidoDesdeHitorial();
+    }
+
+    private void inicializaDatosPedidoDesdeHitorial(){
+        Bundle extras = getIntent().getExtras();
+        bandera = extras.getBoolean("bandera");
+
+        if(bandera){
+            int idPedido = extras.getInt("idPedido");
+
+            Log.d("APP_LAB02", "ID PEDIDO: " + idPedido);
+            Pedido pedido = repositorioPedido.buscarPorId(idPedido);
+
+            edtMail.setText(pedido.getMailContacto());
+            if(pedido.getRetirar()){
+                optRetira.setChecked(true);
+            }
+            else{
+                optEnviar.setChecked(true);
+                edtDireccion.setText(pedido.getDireccionEnvio());
+            }
+            //edtHoraSolicitada.setText(pedido.getFecha().getTime()); //TODO: ver
+            listaPedidoDetalle = pedido.getDetalle();
+            setearAdaptadorProductos();
+            mostrarCostoTotalPedido();
+        }
+
     }
 
     private void deshabilitaDireccionSiRetira(){
@@ -212,7 +241,7 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         });
     }
 
-    private void setearAdaptador(){
+    private void setearAdaptadorProductos(){
         adaptadorListaPedidos = new ArrayAdapter<PedidoDetalle>(PedidoRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, listaPedidoDetalle);
         lstPedidos.setAdapter(adaptadorListaPedidos);
     }
@@ -242,7 +271,7 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
                 pedidoDetalle.setPedido(unPedido); //TODO: revisar
                 listaPedidoDetalle.add(pedidoDetalle);
 
-                setearAdaptador();
+                setearAdaptadorProductos();
 
                 mostrarCostoTotalPedido();
             }

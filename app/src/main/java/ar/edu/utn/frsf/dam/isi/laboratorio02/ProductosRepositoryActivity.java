@@ -40,13 +40,11 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
 
         inicializaAtributos();
 
-        setearAdaptador();
+        setearAdaptadorProductos();
 
         seleccionCategoria();
 
         setearIDProducto();
-
-        //TODO: NUEVO_PEDIDO con un valor en 1??
 
         recibirDatos();
 
@@ -63,7 +61,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
         listaPedidoDetalle = new ArrayList<PedidoDetalle>();
     }
 
-    private void setearAdaptador(){
+    private void setearAdaptadorProductos(){
         adaptadorSpinnerCategorias = new ArrayAdapter<Categoria>(this, android.R.layout.simple_spinner_item, repositorioProductos.getCategorias());
         cmbProductosCategoria.setAdapter(adaptadorSpinnerCategorias);
     }

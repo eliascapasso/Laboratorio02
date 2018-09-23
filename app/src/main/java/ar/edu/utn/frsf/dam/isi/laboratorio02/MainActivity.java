@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
-import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
-
 public class MainActivity extends AppCompatActivity {
 
     private Button btnNuevoPedido;
@@ -34,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, HistorialPedidoActivity.class);
-                i.putExtra("bandera", false);
                 startActivity(i);
             }
         });
