@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.Adaptadores.PedidoAdapter;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 
@@ -21,7 +22,7 @@ public class HistorialPedidoActivity extends AppCompatActivity {
     private Button btnHistorialMenu;
 
     private ArrayList<Pedido> listaPedidos;
-    private ArrayAdapter<Pedido>  adaptadorHistorialPedido;
+    private PedidoAdapter  adaptadorHistorialPedido;
     private PedidoRepository pedidoRepository;
 
     @Override
@@ -71,7 +72,7 @@ public class HistorialPedidoActivity extends AppCompatActivity {
     }
 
     private void setearAdaptadorHistorial(){
-        adaptadorHistorialPedido = new ArrayAdapter<Pedido>(this, android.R.layout.simple_spinner_item, listaPedidos);
+        adaptadorHistorialPedido = new PedidoAdapter(this, listaPedidos);
         lstHistorialPedido.setAdapter(adaptadorHistorialPedido);
     }
 
