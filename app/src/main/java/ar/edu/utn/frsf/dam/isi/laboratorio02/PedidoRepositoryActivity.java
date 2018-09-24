@@ -163,13 +163,7 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     }
 
     private void mostrarCostoTotalPedido(){
-        double costoTotal = 0.0;
-
-        for (PedidoDetalle pedidodetalle: listaPedidoDetalle) {
-                  costoTotal += repositorioProducto.buscarPorId(pedidodetalle.getId()).getPrecio() * pedidodetalle.getCantidad();
-        }
-
-        lblCostoTotalPedido.setText("Total pedido: $" + costoTotal);
+        lblCostoTotalPedido.setText("Total pedido: $" + unPedido.total().toString());
     }
 
     private void hacerPedido() {
@@ -264,7 +258,6 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) { // Activity.RESULT_OK
 
-                //Ejercicio h
                 int cantidadProducto = data.getIntExtra("cantidad", 1);
                 Producto producto = repositorioProducto.buscarPorId(data.getIntExtra("idProducto", 1));
                 PedidoDetalle pedidoDetalle = new PedidoDetalle(cantidadProducto, producto);
