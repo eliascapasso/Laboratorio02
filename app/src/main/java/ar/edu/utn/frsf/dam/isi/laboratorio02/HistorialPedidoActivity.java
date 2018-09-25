@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -22,7 +21,7 @@ public class HistorialPedidoActivity extends AppCompatActivity {
     private Button btnHistorialMenu;
 
     private ArrayList<Pedido> listaPedidos;
-    private PedidoAdapter  adaptadorHistorialPedido;
+    public static PedidoAdapter adaptadorHistorialPedido;
     private PedidoRepository pedidoRepository;
 
     @Override

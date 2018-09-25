@@ -2,7 +2,6 @@ package ar.edu.utn.frsf.dam.isi.laboratorio02.Adaptadores;
 
 import android.content.Context;
 import java.util.List;
-
 import ar.edu.utn.frsf.dam.isi.laboratorio02.PedidoHolder;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 
@@ -15,7 +14,4 @@ public class PedidoAdapter extends PedidoHolder{
         this.contexto = context;
         this.Pedidos = objects;
     }
-
-
-
 }

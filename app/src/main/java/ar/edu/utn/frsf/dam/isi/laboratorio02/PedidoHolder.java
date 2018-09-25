@@ -2,7 +2,6 @@ package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.List;
-
-import ar.edu.utn.frsf.dam.isi.laboratorio02.Adaptadores.PedidoAdapter;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 
 public class PedidoHolder extends BaseAdapter{
@@ -54,8 +49,19 @@ public class PedidoHolder extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final View vista = inflater.inflate(R.layout.fila_historial, null);
+
+        inicializaAtributos(vista);
+
+        seteaAtributos(position);
+
+        cancelarPedido(position);
+
+        return vista;
+    }
+
+    private void inicializaAtributos(View vista){
         tvMailPedido = (TextView)vista.findViewById(R.id.tvMailPedido);
         tvHoraEntrega = (TextView)vista.findViewById(R.id.tvHoraEntrega);
         tvCantidadItems = (TextView)vista.findViewById(R.id.tvCantidadItems);
@@ -63,16 +69,20 @@ public class PedidoHolder extends BaseAdapter{
         tvEstado = (TextView)vista.findViewById(R.id.tvEstado);
         ivTipoEntrega = (ImageView) vista.findViewById(R.id.ivTipoEntrega);
         btnCancelar = (Button) vista.findViewById(R.id.btnCancelar);
+    }
 
+    private void seteaAtributos(int position){
         tvMailPedido.setText(listaPedidos.get(position).getMailContacto());
         tvHoraEntrega.setText(listaPedidos.get(position).getFecha().toString());
         //tvCantidadItems.setText(listaPedidos.get(position).getDetalle().size()); //TODO: item??
-        tvPrecio.setText("A pagar: $" + listaPedidos.get(position).total().toString()); //TODO: ver
+        tvPrecio.setText("A pagar: $" + listaPedidos.get(position).total().toString());
+        tvEstado.setText(listaPedidos.get(position).getEstado().toString());
 
+        //Setea el color del TextView "tvEstado" de acuerdo al estado actual del pedido
         switch (listaPedidos.get(position).getEstado()){
             case LISTO:
                 this.tvEstado.setTextColor(Color.DKGRAY);
-            break;
+                break;
             case ENTREGADO:
                 this.tvEstado.setTextColor(Color.BLUE);
                 break;
@@ -91,33 +101,30 @@ public class PedidoHolder extends BaseAdapter{
                 break;
         }
 
-        tvEstado.setText(listaPedidos.get(position).getEstado().toString());
-
+        //Setea imagen de acuerdo al tipo de entrega seleccionado en el pedido
         if(listaPedidos.get(position).getRetirar()){
             ivTipoEntrega.setImageResource(R.drawable.retira);
         }
         else{
             ivTipoEntrega.setImageResource(R.drawable.envio);
         }
+    }
 
-        View.OnClickListener onClickListener = new View.OnClickListener() {
+    private void cancelarPedido(final int position){
+        btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int indice = (int) view.getTag();
-                Pedido pedidoSeleccionado = listaPedidos.get(indice);
-                if (pedidoSeleccionado.getEstado().equals(Pedido.Estado.REALIZADO) ||
-                        pedidoSeleccionado.getEstado().equals(Pedido.Estado.ACEPTADO) ||
-                        pedidoSeleccionado.getEstado().equals(Pedido.Estado.EN_PREPARACION)) {
+                Pedido pedidoSeleccionado = listaPedidos.get(position);
+                if( pedidoSeleccionado.getEstado().equals(Pedido.Estado.REALIZADO)||
+                        pedidoSeleccionado.getEstado().equals(Pedido.Estado.ACEPTADO)||
+                        pedidoSeleccionado.getEstado().equals(Pedido.Estado.EN_PREPARACION)){
+
                     pedidoSeleccionado.setEstado(Pedido.Estado.CANCELADO);
 
-                    //PedidoAdapter pedidoAdapter = new PedidoAdapter(contexto, listaPedidos);
-                    Log.d("APP_LAB02", "ENTRA");
-                    //PedidoAdapter.this.notifyDataSetChanged();
+                    HistorialPedidoActivity.adaptadorHistorialPedido.notifyDataSetChanged();
                     return;
                 }
             }
-        };
-
-        return vista;
+        });
     }
 }
