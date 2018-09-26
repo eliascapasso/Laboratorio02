@@ -2,6 +2,7 @@ package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import java.util.List;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 
 public class PedidoHolder extends BaseAdapter{
-    private static LayoutInflater inflater = null;
+    public static LayoutInflater inflater = null;
 
     public TextView tvMailPedido;
     public TextView tvHoraEntrega;
@@ -22,6 +23,7 @@ public class PedidoHolder extends BaseAdapter{
     public TextView tvEstado;
     public ImageView ivTipoEntrega;
     public Button btnCancelar;
+    public Button btnVerDetalle;
 
     private Context contexto;
     private List<Pedido> listaPedidos;
@@ -40,12 +42,12 @@ public class PedidoHolder extends BaseAdapter{
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return listaPedidos.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return listaPedidos.get(position).getId();
     }
 
     @Override
@@ -69,14 +71,15 @@ public class PedidoHolder extends BaseAdapter{
         tvEstado = (TextView)vista.findViewById(R.id.tvEstado);
         ivTipoEntrega = (ImageView) vista.findViewById(R.id.ivTipoEntrega);
         btnCancelar = (Button) vista.findViewById(R.id.btnCancelar);
+        btnVerDetalle = (Button) vista.findViewById(R.id.btnVerDetalle);
     }
 
     private void seteaAtributos(int position){
-        tvMailPedido.setText(listaPedidos.get(position).getMailContacto());
-        tvHoraEntrega.setText(listaPedidos.get(position).getFecha().toString());
-        //tvCantidadItems.setText(listaPedidos.get(position).getDetalle().size()); //TODO: item??
+        tvMailPedido.setText("Contacto: " + listaPedidos.get(position).getMailContacto());
+        tvHoraEntrega.setText("Entrega: " + listaPedidos.get(position).getFecha().toString());
+        //tvCantidadItems.setText("Items: " + listaPedidos.get(position).getDetalle().size()); //TODO: item??
         tvPrecio.setText("A pagar: $" + listaPedidos.get(position).total().toString());
-        tvEstado.setText(listaPedidos.get(position).getEstado().toString());
+        tvEstado.setText("Estado: " + listaPedidos.get(position).getEstado().toString());
 
         //Setea el color del TextView "tvEstado" de acuerdo al estado actual del pedido
         switch (listaPedidos.get(position).getEstado()){
@@ -118,6 +121,8 @@ public class PedidoHolder extends BaseAdapter{
                 if( pedidoSeleccionado.getEstado().equals(Pedido.Estado.REALIZADO)||
                         pedidoSeleccionado.getEstado().equals(Pedido.Estado.ACEPTADO)||
                         pedidoSeleccionado.getEstado().equals(Pedido.Estado.EN_PREPARACION)){
+
+                    Log.d("APP_LAB02", "Cancela el pedido");
 
                     pedidoSeleccionado.setEstado(Pedido.Estado.CANCELADO);
 

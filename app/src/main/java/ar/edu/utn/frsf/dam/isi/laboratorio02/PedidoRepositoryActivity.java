@@ -13,6 +13,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Calendar;
 import android.util.Log;
@@ -47,7 +49,6 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     private ArrayAdapter<PedidoDetalle> adaptadorListaPedidos;
     private List<PedidoDetalle> listaPedidoDetalle;
     private int posicionProductoSeleccionado;
-    private boolean bandera; //True si proviene del historial de pedidos, False si proviene del menu principal
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,29 +91,31 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     }
 
     private void inicializaDatosPedidoDesdeHitorial(){
-        Bundle extras = getIntent().getExtras();
-        bandera = extras.getBoolean("bandera");
-
-        if(bandera){
-            int idPedido = extras.getInt("idPedido");
-
-            Log.d("APP_LAB02", "ID PEDIDO: " + idPedido);
-            Pedido pedido = repositorioPedido.buscarPorId(idPedido);
-
-            edtMail.setText(pedido.getMailContacto());
-            if(pedido.getRetirar()){
-                optRetira.setChecked(true);
-            }
-            else{
-                optEnviar.setChecked(true);
-                edtDireccion.setText(pedido.getDireccionEnvio());
-            }
-            //edtHoraSolicitada.setText(pedido.getFecha().getTime()); //TODO: ver
-            listaPedidoDetalle = pedido.getDetalle();
-            setearAdaptadorProductos();
-            mostrarCostoTotalPedido();
+        Intent i1= getIntent();
+        int idPedido = 0;
+        if(i1.getExtras()!=null){
+            idPedido = i1.getExtras().getInt("idPedidoSeleccionado");
         }
 
+        Log.d("APP_LAB02", "ID PEDIDO: " + idPedido);
+
+        Pedido elPedido;
+
+        if(idPedido>0){
+            elPedido = repositorioPedido.buscarPorId(idPedido);
+            edtMail.setText(elPedido.getMailContacto());
+            edtDireccion.setText(elPedido.getDireccionEnvio());
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            edtHoraSolicitada.setText(sdf.format(elPedido.getFecha()));
+            optEnviar.setChecked(!elPedido.getRetirar());
+            optRetira.setChecked(elPedido.getRetirar());
+        }else {
+            elPedido = new Pedido();
+        }
+
+        listaPedidoDetalle = elPedido.getDetalle();
+        setearAdaptadorProductos();
+        mostrarCostoTotalPedido();
     }
 
     private void deshabilitaDireccionSiRetira(){
