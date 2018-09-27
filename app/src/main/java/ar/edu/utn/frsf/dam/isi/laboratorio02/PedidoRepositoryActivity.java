@@ -194,6 +194,8 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
                     unPedido = new Pedido();
                     Log.d("APP_LAB02", "Pedido nuevo: " + unPedido.toString());
 
+                    gestionPedidos();
+
                     Intent historialPedidoActivity = new Intent(PedidoRepositoryActivity.this, HistorialPedidoActivity.class);
                     startActivity(historialPedidoActivity);
                 }
@@ -202,6 +204,36 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void gestionPedidos(){
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.currentThread().sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // buscar pedidos no aceptados y aceptarlos utomáticamente
+                List<Pedido> lista = repositorioPedido.getLista();
+                for(Pedido p:lista){
+                    if(p.getEstado().equals(Pedido.Estado.REALIZADO))
+                        p.setEstado(Pedido.Estado.ACEPTADO);
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(PedidoRepositoryActivity.this,
+                                "Informacion de pedidos actualizada!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        };
+        Thread unHilo = new Thread(r);
+        unHilo.start();
+
     }
 
     private boolean validarDatosHora(String[] horaIngresada, GregorianCalendar hora){
