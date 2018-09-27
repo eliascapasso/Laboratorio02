@@ -63,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Direccion 1234"
+        android:hint="Ingrese su dirección de envío"
         android:inputType="text"
         android:visibility="visible" />
 

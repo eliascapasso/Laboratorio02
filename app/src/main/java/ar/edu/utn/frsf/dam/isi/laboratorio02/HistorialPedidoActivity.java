@@ -3,6 +3,7 @@ package ar.edu.utn.frsf.dam.isi.laboratorio02;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -38,6 +39,8 @@ public class HistorialPedidoActivity extends AppCompatActivity {
         setearAdaptadorHistorial();
 
         clickLargoEnPedido(); //TODO: no funciona con lista personalizada
+
+        verDetallePedido();
     }
 
     private void inicializarAtributos(){
@@ -88,6 +91,15 @@ public class HistorialPedidoActivity extends AppCompatActivity {
                 startActivity(mostrarPedido);
 
                 return true;
+            }
+        });
+    }
+
+    private void verDetallePedido(){
+        lstHistorialPedido.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("APP_LAB02", "DETALLE PEDIDO");
             }
         });
     }

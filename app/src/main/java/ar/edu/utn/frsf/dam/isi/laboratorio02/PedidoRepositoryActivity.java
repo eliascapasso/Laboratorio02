@@ -92,16 +92,16 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
 
     private void inicializaDatosPedidoDesdeHitorial(){
         Intent i1= getIntent();
-        int idPedido = 0;
+        int idPedido = -1;
         if(i1.getExtras()!=null){
-            idPedido = i1.getExtras().getInt("idPedidoSeleccionado");
+            idPedido = i1.getExtras().getInt("idPedido");
         }
 
         Log.d("APP_LAB02", "ID PEDIDO: " + idPedido);
 
         Pedido elPedido;
 
-        if(idPedido>0){
+        if(idPedido>-1){
             elPedido = repositorioPedido.buscarPorId(idPedido);
             edtMail.setText(elPedido.getMailContacto());
             edtDireccion.setText(elPedido.getDireccionEnvio());
@@ -109,6 +109,15 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
             edtHoraSolicitada.setText(sdf.format(elPedido.getFecha()));
             optEnviar.setChecked(!elPedido.getRetirar());
             optRetira.setChecked(elPedido.getRetirar());
+
+            btnHacerPedido.setEnabled(false);
+            btnQuitarProducto.setEnabled(false);
+            btnAddProducto.setEnabled(false);
+            edtMail.setEnabled(false);
+            edtDireccion.setEnabled(false);
+            edtHoraSolicitada.setEnabled(false);
+            optRetira.setEnabled(false);
+            optEnviar.setEnabled(false);
         }else {
             elPedido = new Pedido();
         }
