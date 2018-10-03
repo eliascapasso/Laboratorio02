@@ -25,8 +25,6 @@ public class EstadoPedidoReceiver extends BroadcastReceiver {
 
         unPedido = pedidoRepository.buscarPorId(idPedido);
 
-        Toast.makeText(context, "Info Pedido", Toast.LENGTH_LONG).show();
-
-        throw new UnsupportedOperationException("Not yet implemented");
+        Toast.makeText(context, "Pedido para " + pedidoRepository.buscarPorId(idPedido).getMailContacto() + " ha cambiado a estado ACEPTADO", Toast.LENGTH_LONG).show();
     }
 }
