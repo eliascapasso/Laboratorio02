@@ -14,6 +14,7 @@ import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 public class EstadoPedidoReceiver extends BroadcastReceiver {
 
     public static String ESTADO_ACEPTADO = "ACEPTADO";
+    public static String ESTADO_EN_PREPARACION = "EN_PREPARACION";
 
     private PedidoRepository pedidoRepository = new PedidoRepository();
     private Pedido unPedido;
@@ -27,28 +28,47 @@ public class EstadoPedidoReceiver extends BroadcastReceiver {
 
         unPedido = pedidoRepository.buscarPorId(idPedido);
 
-        Toast.makeText(context, "Pedido para " + unPedido.getMailContacto() + " ha cambiado a estado ACEPTADO", Toast.LENGTH_LONG).show();
+        if(unPedido.getEstado().equals(Pedido.Estado.ACEPTADO)){
+            Toast.makeText(context, "Pedido para " + unPedido.getMailContacto() + " ha cambiado a estado ACEPTADO", Toast.LENGTH_LONG).show();
 
-        Intent pedidoIntent = new Intent(context, PedidoRepositoryActivity.class);
-        pedidoIntent.putExtra("idPedido", idPedido);
-        pedidoIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, pedidoIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            Intent pedidoIntent = new Intent(context, PedidoRepositoryActivity.class);
+            pedidoIntent.putExtra("idPedido", idPedido);
+            pedidoIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, pedidoIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationManager nManager = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager nManager = (NotificationManager) context
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "CANAL01")
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setContentTitle("Tu pedido fue aceptado")
-                .setContentText("El costo será de $" + unPedido.total() +
-                                "\nPrevisto el envío para " + unPedido.getFecha())
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("El costo será de $" + unPedido.total() +
-                                "\nPrevisto el envío para " + unPedido.getFecha()))
-                .setWhen(System.currentTimeMillis())
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "CANAL01")
+                    .setSmallIcon(android.R.drawable.ic_dialog_info)
+                    .setContentTitle("Tu pedido fue aceptado")
+                    .setContentText("El costo será de $" + unPedido.total() +
+                            "\nPrevisto el envío para " + unPedido.getFecha())
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText("El costo será de $" + unPedido.total() +
+                                    "\nPrevisto el envío para " + unPedido.getFecha()))
+                    .setWhen(System.currentTimeMillis())
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true);
 
-        nManager.notify(123456, builder.build());
+            nManager.notify(123456, builder.build());
+        }
+        else if(unPedido.getEstado().equals(Pedido.Estado.EN_PREPARACION)){
+            Intent historialActivity = new Intent(context, HistorialPedidoActivity.class);
+            historialActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, historialActivity, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationManager nManager = (NotificationManager) context
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "CANAL01")
+                    .setSmallIcon(android.R.drawable.ic_dialog_info)
+                    .setContentTitle("Lista de pedidos")
+                    .setWhen(System.currentTimeMillis())
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true);
+
+            nManager.notify(123456, builder.build());
+        }
     }
 }

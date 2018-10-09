@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnNuevoPedido;
     private Button btnHistorial;
     private Button btnListaProductos;
+    private Button btnPrepararPedidos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         createNotificationChannel();
+
+        btnPrepararPedidos= (Button)findViewById(R.id.btnPrepararPedidos);
+        btnPrepararPedidos.setOnClickListener(
+        new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, PrepararPedidoService.class);
+                startService(i);
+            }
+        });
 
         btnNuevoPedido = (Button) findViewById(R.id.btnMainNuevoPedido);
         btnNuevoPedido.setOnClickListener(new View.OnClickListener() {
