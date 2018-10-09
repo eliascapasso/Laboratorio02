@@ -8,4 +8,6 @@
     <string name="pedido_lbl_modo_entrega">Modo de Entrega</string>
     <string name="pedido_lbl_direccion">Dirección de envio</string>
     <string name="pedido_lbl_hora_entrega">Hora Solicitada</string>
+    <string name="canal_estado_nombre">Tu pedido fue aceptado</string>
+    <string name="canal_estado_descr">El costo será de </string>
 </resources>
