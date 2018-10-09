@@ -29,23 +29,27 @@ public class EstadoPedidoReceiver extends BroadcastReceiver {
 
         Toast.makeText(context, "Pedido para " + unPedido.getMailContacto() + " ha cambiado a estado ACEPTADO", Toast.LENGTH_LONG).show();
 
+        Intent pedidoIntent = new Intent(context, PedidoRepositoryActivity.class);
+        pedidoIntent.putExtra("idPedido", unPedido.getId());
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, pedidoIntent, 0);
+
         NotificationManager nManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "CANAL01")
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setContentTitle("Tu pedido fue aceptado")
-                .setContentText("El costo será de " + unPedido.total() +
+                .setContentText("El costo será de $" + unPedido.total() +
                                 "\nPrevisto el envío para " + unPedido.getFecha())
-                .setWhen(System.currentTimeMillis());
-
-        Intent targetIntent = new Intent(context, MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-                targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(contentIntent);
-
-        builder.setAutoCancel(true);
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText("El costo será de $" + unPedido.total() +
+                                "\nPrevisto el envío para " + unPedido.getFecha()))
+                .setWhen(System.currentTimeMillis())
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
 
         nManager.notify(123456, builder.build());
+
     }
 }
