@@ -1,6 +1,11 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -54,6 +59,12 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedido_repository);
+
+        BroadcastReceiver br = new EstadoPedidoReceiver();
+        IntentFilter filtro = new IntentFilter();
+        filtro.addAction(EstadoPedidoReceiver.ESTADO_ACEPTADO);
+        getApplication().getApplicationContext()
+                .registerReceiver(br,filtro);
 
         inicializaAtributos();
 
@@ -220,6 +231,12 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
                 for(Pedido p:lista){
                     if(p.getEstado().equals(Pedido.Estado.REALIZADO))
                         p.setEstado(Pedido.Estado.ACEPTADO);
+
+                    //envia el broadcastreciver
+                    Intent intent = new Intent(PedidoRepositoryActivity.this, EstadoPedidoReceiver.class);
+                    intent.putExtra("idPedido",p.getId());
+                    intent.setAction(EstadoPedidoReceiver.ESTADO_ACEPTADO);
+                    sendBroadcast(intent);
                 }
                 runOnUiThread(new Runnable() {
                     @Override

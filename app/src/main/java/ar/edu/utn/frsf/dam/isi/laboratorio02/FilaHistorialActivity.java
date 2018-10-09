@@ -28,12 +28,11 @@ public class FilaHistorialActivity extends LinearLayout {
         pedidoHolder = (PedidoHolder) this.getTag();
         tvMailPedido = pedidoHolder.tvMailPedido;
         tvHoraEntrega = pedidoHolder.tvHoraEntrega;
-        tvCantidadItems = tvCantidadItems;
-        tvPrecio = tvPrecio;
-        tvEstado = tvEstado;
-        ivTipoEntrega = ivTipoEntrega;
-        btnCancelar = btnCancelar;
-        btnVerDetalle = btnVerDetalle;
+        tvCantidadItems = pedidoHolder.tvCantidadItems;
+        tvPrecio = pedidoHolder.tvPrecio;
+        tvEstado = pedidoHolder.tvEstado;
+        ivTipoEntrega = pedidoHolder.ivTipoEntrega;
+        btnCancelar = pedidoHolder.btnCancelar;
+        btnVerDetalle = pedidoHolder.btnVerDetalle;
     }
-    // Resto de métodos de la clase
 }
