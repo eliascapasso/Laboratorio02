@@ -23,7 +23,7 @@ public class PrepararPedidoService extends IntentService {
             @Override
             public void run() {
                 try {
-                    Thread.currentThread().sleep(5000);
+                    Thread.currentThread().sleep(20000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -32,8 +32,6 @@ public class PrepararPedidoService extends IntentService {
 
                 listaPedidos = pedidoRepository.getLista();
 
-
-
                 //envia el broadcastreciver
                 Intent intent = new Intent(PrepararPedidoService.this, EstadoPedidoReceiver.class);
 
@@ -41,15 +39,6 @@ public class PrepararPedidoService extends IntentService {
 
                 intent.setAction(EstadoPedidoReceiver.ESTADO_EN_PREPARACION);
                 sendBroadcast(intent);
-
-                /*runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(PedidoRepositoryActivity.this,
-                                "Se despierta el hilo",
-                                Toast.LENGTH_LONG).show();
-                    }
-                });*/
             }
         };
         Thread unHilo = new Thread(r);
