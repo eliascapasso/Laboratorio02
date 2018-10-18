@@ -1,4 +1,4 @@
-package ar.edu.utn.frsf.dam.isi.laboratorio02;
+package ar.edu.utn.frsf.dam.isi.laboratorio02.Adaptadores;
 
 import android.widget.Button;
 import android.widget.ImageView;
