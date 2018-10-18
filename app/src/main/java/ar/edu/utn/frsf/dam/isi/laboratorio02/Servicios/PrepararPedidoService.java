@@ -1,4 +1,4 @@
-package ar.edu.utn.frsf.dam.isi.laboratorio02;
+package ar.edu.utn.frsf.dam.isi.laboratorio02.Servicios;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import java.util.List;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.EstadoPedidoReceiver;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 
