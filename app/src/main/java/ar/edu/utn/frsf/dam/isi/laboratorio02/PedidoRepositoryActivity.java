@@ -91,20 +91,18 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         emailDefecto = p.getString("edtEmailDefecto", "");
         retirarDefecto = p.getBoolean("optRetirarDefecto", false);
 
+        edtMail = (EditText) findViewById(R.id.editPedidoCorreo);
+
         if(!emailDefecto.equals("")){
             edtMail.setText(emailDefecto);
         }
-        else{
-            edtMail = (EditText) findViewById(R.id.editPedidoCorreo);
-        }
+
+        optRetira = (RadioButton) findViewById(R.id.optPedidoRetira);
+        optEnviar = (RadioButton) findViewById(R.id.optPedidoEnviar);
 
         if(retirarDefecto){
-            optRetira.setChecked(false);
-            optEnviar.setChecked(true);
-        }
-        else{
-            optRetira = (RadioButton) findViewById(R.id.optPedidoRetira);
-            optEnviar = (RadioButton) findViewById(R.id.optPedidoEnviar);
+            optRetira.setChecked(true);
+            optEnviar.setChecked(false);
         }
 
 
