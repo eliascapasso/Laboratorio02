@@ -4,6 +4,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -26,6 +29,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
@@ -47,6 +51,8 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     private Button btnHacerPedido;
     private Button btnVolver;
     private TextView lblCostoTotalPedido;
+    private String emailDefecto;
+    private boolean retirarDefecto;
 
     private Pedido unPedido;
     private PedidoRepository repositorioPedido;
@@ -80,10 +86,29 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     }
 
     private void inicializaAtributos(){
-        edtMail = (EditText) findViewById(R.id.editPedidoCorreo);
+        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+
+        emailDefecto = p.getString("edtEmailDefecto", "");
+        retirarDefecto = p.getBoolean("optRetirarDefecto", false);
+
+        if(!emailDefecto.equals("")){
+            edtMail.setText(emailDefecto);
+        }
+        else{
+            edtMail = (EditText) findViewById(R.id.editPedidoCorreo);
+        }
+
+        if(retirarDefecto){
+            optRetira.setChecked(false);
+            optEnviar.setChecked(true);
+        }
+        else{
+            optRetira = (RadioButton) findViewById(R.id.optPedidoRetira);
+            optEnviar = (RadioButton) findViewById(R.id.optPedidoEnviar);
+        }
+
+
         rgOptEntrega = (RadioGroup)findViewById(R.id.optPedidoModoEntrega);
-        optRetira = (RadioButton) findViewById(R.id.optPedidoRetira);
-        optEnviar = (RadioButton) findViewById(R.id.optPedidoEnviar);
         edtDireccion = (EditText) findViewById(R.id.edtPedidoDireccion);
         edtHoraSolicitada = (EditText) findViewById(R.id.edtPedidoHoraEntrega);
         lstPedidos = (ListView) findViewById(R.id.lstPedidoItems);
