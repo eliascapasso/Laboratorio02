@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="optRetirarDefecto"
+        android:summary="el pedido es para retirar"
+        android:title="Retirar por defecto" />
+    <EditTextPreference
+        android:key="edtEmailDefecto"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="se usará por defecto"
+        android:title="Correo electronico" />
+</PreferenceScreen>
