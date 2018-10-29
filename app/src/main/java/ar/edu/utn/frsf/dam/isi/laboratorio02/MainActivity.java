@@ -10,7 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.List;
+
 import ar.edu.utn.frsf.dam.isi.laboratorio02.Servicios.PrepararPedidoService;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnListaProductos;
     private Button btnPrepararPedidos;
     private Button btnConfiguracion;
+    private Button btnCategorias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         createNotificationChannel();
+
+        btnCategorias = (Button)findViewById(R.id.btnCategorias);
+        btnCategorias.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(MainActivity.this, CategoriaActivity.class);
+                        startActivity(i);
+                    }
+                });
 
         btnConfiguracion = (Button)findViewById(R.id.btnConfiguracion);
         btnConfiguracion.setOnClickListener(
