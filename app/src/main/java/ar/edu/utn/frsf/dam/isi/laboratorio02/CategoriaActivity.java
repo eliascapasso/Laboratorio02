@@ -29,8 +29,6 @@ public class CategoriaActivity extends AppCompatActivity {
                 final Categoria categoria = new Categoria(textoCat.getText().toString());
                 final CategoriaRest categoriaRest = new CategoriaRest();
 
-                categoriaRest.crearCategoria(categoria);
-
                 Runnable r = new Runnable() {
                     @Override
                     public void run() {
