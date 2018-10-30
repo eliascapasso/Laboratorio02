@@ -117,10 +117,10 @@ public class CategoriaRest {
 
         try{
             // GESTIONAR LA CONEXION
-            URL url = new URL("http://10.0.2.2:5000/categorias/1");
+            URL url = new URL("http://10.0.2.2:5000/categorias/");
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Type","application/json");
-            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestMethod("GET");
 
             // Leer la respuesta
             in = new BufferedInputStream(urlConnection.getInputStream());
@@ -145,7 +145,9 @@ public class CategoriaRest {
 
                 // iterar todas las entradas del arreglo
                 for(int i = 0; i < listaCategorias.length() ; i++){
-                    Categoria cat = new Categoria(listaCategorias.get(i).toString());
+                    String nombreCategoria = listaCategorias.getJSONObject(i).getString("nombre");
+                    int idCategoria = listaCategorias.getJSONObject(i).getInt("id");
+                    Categoria cat = new Categoria(idCategoria, nombreCategoria);
 
                     // analizar cada element del JSONArray
                     // armar una instancia de categoría y agregarla a la lista
