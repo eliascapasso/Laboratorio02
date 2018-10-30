@@ -40,9 +40,44 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
 
         inicializaAtributos();
 
-        setearAdaptadorProductos();
+        //setearAdaptadorProductos();
 
-        seleccionCategoria();
+        //seleccionCategoria();
+
+        Runnable r = new Runnable() {
+            @Override public void run() {
+                CategoriaRest catRest = new CategoriaRest();
+                Categoria[] cats = catRest.listarTodas().toArray(new Categoria[0]);
+                final List<Categoria> listaCategoria = new ArrayList<Categoria>();
+                for(int i = 0; i < cats.length ; i++){
+                    listaCategoria.add(cats[i]);
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        adaptadorSpinnerCategorias = new ArrayAdapter<Categoria>(ProductosRepositoryActivity.this, android.R.layout.simple_spinner_dropdown_item, listaCategoria);
+                        cmbProductosCategoria.setAdapter(adaptadorSpinnerCategorias);
+                        cmbProductosCategoria.setSelection(0);
+                        cmbProductosCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                catSeleccionada = adaptadorSpinnerCategorias.getItem(position);
+
+                                adaptadorListaProductos = new ArrayAdapter<Producto>(ProductosRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, repositorioProductos.buscarPorCategoria(catSeleccionada));
+                                //adaptadorListaProductos.clear();
+                                //adaptadorListaProductos.addAll(repositorioProductos.buscarPorCategoria( (Categoria)parent.getItemAtPosition(position)) );
+                                adaptadorListaProductos.notifyDataSetChanged();
+                                lstProductos.setAdapter(adaptadorListaProductos);
+                            }
+                            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+                    }
+                });
+            }
+        };
+        Thread hiloCargarCombo = new Thread(r);
+        hiloCargarCombo.start();
 
         setearIDProducto();
 
