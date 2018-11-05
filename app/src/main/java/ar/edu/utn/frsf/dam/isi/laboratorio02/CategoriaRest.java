@@ -108,7 +108,6 @@ public class CategoriaRest {
 
     }
 
-    //Definir el metodo
     public List<Categoria> listarTodas(){
         // inicializar variables
         List<Categoria> resultado = new ArrayList<>();
