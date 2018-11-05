@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.Adaptadores.PedidoHolder;
+
 public class FilaHistorialActivity extends LinearLayout {
     public TextView tvMailPedido;
     public TextView tvHoraEntrega;
@@ -28,12 +30,11 @@ public class FilaHistorialActivity extends LinearLayout {
         pedidoHolder = (PedidoHolder) this.getTag();
         tvMailPedido = pedidoHolder.tvMailPedido;
         tvHoraEntrega = pedidoHolder.tvHoraEntrega;
-        tvCantidadItems = tvCantidadItems;
-        tvPrecio = tvPrecio;
-        tvEstado = tvEstado;
-        ivTipoEntrega = ivTipoEntrega;
-        btnCancelar = btnCancelar;
-        btnVerDetalle = btnVerDetalle;
+        tvCantidadItems = pedidoHolder.tvCantidadItems;
+        tvPrecio = pedidoHolder.tvPrecio;
+        tvEstado = pedidoHolder.tvEstado;
+        ivTipoEntrega = pedidoHolder.ivTipoEntrega;
+        btnCancelar = pedidoHolder.btnCancelar;
+        btnVerDetalle = pedidoHolder.btnVerDetalle;
     }
-    // Resto de métodos de la clase
 }

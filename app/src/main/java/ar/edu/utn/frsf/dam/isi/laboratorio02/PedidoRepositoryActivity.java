@@ -1,12 +1,20 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -21,6 +29,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
@@ -42,6 +51,8 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     private Button btnHacerPedido;
     private Button btnVolver;
     private TextView lblCostoTotalPedido;
+    private String emailDefecto;
+    private boolean retirarDefecto;
 
     private Pedido unPedido;
     private PedidoRepository repositorioPedido;
@@ -54,6 +65,12 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedido_repository);
+
+        BroadcastReceiver br = new EstadoPedidoReceiver();
+        IntentFilter filtro = new IntentFilter();
+        filtro.addAction(EstadoPedidoReceiver.ESTADO_ACEPTADO);
+        getApplication().getApplicationContext()
+                .registerReceiver(br,filtro);
 
         inicializaAtributos();
 
@@ -69,10 +86,27 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     }
 
     private void inicializaAtributos(){
+        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+
+        emailDefecto = p.getString("edtEmailDefecto", "");
+        retirarDefecto = p.getBoolean("optRetirarDefecto", false);
+
         edtMail = (EditText) findViewById(R.id.editPedidoCorreo);
-        rgOptEntrega = (RadioGroup)findViewById(R.id.optPedidoModoEntrega);
+
+        if(!emailDefecto.equals("")){
+            edtMail.setText(emailDefecto);
+        }
+
         optRetira = (RadioButton) findViewById(R.id.optPedidoRetira);
         optEnviar = (RadioButton) findViewById(R.id.optPedidoEnviar);
+
+        if(retirarDefecto){
+            optRetira.setChecked(true);
+            optEnviar.setChecked(false);
+        }
+
+
+        rgOptEntrega = (RadioGroup)findViewById(R.id.optPedidoModoEntrega);
         edtDireccion = (EditText) findViewById(R.id.edtPedidoDireccion);
         edtHoraSolicitada = (EditText) findViewById(R.id.edtPedidoHoraEntrega);
         lstPedidos = (ListView) findViewById(R.id.lstPedidoItems);
@@ -194,6 +228,8 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
                     unPedido = new Pedido();
                     Log.d("APP_LAB02", "Pedido nuevo: " + unPedido.toString());
 
+                    gestionPedidos();
+
                     Intent historialPedidoActivity = new Intent(PedidoRepositoryActivity.this, HistorialPedidoActivity.class);
                     startActivity(historialPedidoActivity);
                 }
@@ -202,6 +238,42 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void gestionPedidos(){
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.currentThread().sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // buscar pedidos no aceptados y aceptarlos utomáticamente
+                List<Pedido> lista = repositorioPedido.getLista();
+                for(Pedido p:lista){
+                    if(p.getEstado().equals(Pedido.Estado.REALIZADO))
+                        p.setEstado(Pedido.Estado.ACEPTADO);
+
+                    //envia el broadcastreciver
+                    Intent intent = new Intent(PedidoRepositoryActivity.this, EstadoPedidoReceiver.class);
+                    intent.putExtra("idPedido",p.getId());
+                    intent.setAction(EstadoPedidoReceiver.ESTADO_ACEPTADO);
+                    sendBroadcast(intent);
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(PedidoRepositoryActivity.this,
+                                "Informacion de pedidos actualizada!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        };
+        Thread unHilo = new Thread(r);
+        unHilo.start();
+
     }
 
     private boolean validarDatosHora(String[] horaIngresada, GregorianCalendar hora){
