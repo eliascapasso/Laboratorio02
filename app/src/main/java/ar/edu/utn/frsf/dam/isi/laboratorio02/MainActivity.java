@@ -8,12 +8,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.List;
+
+import ar.edu.utn.frsf.dam.isi.laboratorio02.Servicios.PrepararPedidoService;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button btnNuevoPedido;
     private Button btnHistorial;
     private Button btnListaProductos;
+    private Button btnPrepararPedidos;
+    private Button btnConfiguracion;
+    private Button btnCategorias;
+    private Button btnGestionProd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +32,48 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         createNotificationChannel();
+
+        btnGestionProd = (Button)findViewById(R.id.btnGestionProd);
+        btnGestionProd.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(MainActivity.this, GestionProductoActivity.class);
+                        startActivity(i);
+                    }
+                });
+
+        btnCategorias = (Button)findViewById(R.id.btnCategorias);
+        btnCategorias.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(MainActivity.this, CategoriaActivity.class);
+                        startActivity(i);
+                    }
+                });
+
+        btnConfiguracion = (Button)findViewById(R.id.btnConfiguracion);
+        btnConfiguracion.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(MainActivity.this, ConfiguracionActivity.class);
+                        startActivity(i);
+                    }
+                });
+
+        btnPrepararPedidos = (Button)findViewById(R.id.btnPrepararPedidos);
+        btnPrepararPedidos.setOnClickListener(
+        new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Espere por favor", Toast.LENGTH_LONG).show();
+
+                Intent i = new Intent(MainActivity.this, PrepararPedidoService.class);
+                startService(i);
+            }
+        });
 
         btnNuevoPedido = (Button) findViewById(R.id.btnMainNuevoPedido);
         btnNuevoPedido.setOnClickListener(new View.OnClickListener() {

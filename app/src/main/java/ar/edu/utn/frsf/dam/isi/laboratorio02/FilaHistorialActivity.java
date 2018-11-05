@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.Adaptadores.PedidoHolder;
+
 public class FilaHistorialActivity extends LinearLayout {
     public TextView tvMailPedido;
     public TextView tvHoraEntrega;

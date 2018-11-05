@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.List;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.FilaHistorialActivity;
-import ar.edu.utn.frsf.dam.isi.laboratorio02.PedidoHolder;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.PedidoRepositoryActivity;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.R;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
