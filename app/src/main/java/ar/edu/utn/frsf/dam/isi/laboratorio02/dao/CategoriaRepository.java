@@ -12,7 +12,7 @@ public class CategoriaRepository {
     private CategoriaDAO categoriaDAO;
     private CategoriaRepository(Context ctx){
         AppDatabase db = Room.databaseBuilder(ctx,
-                AppDatabase.class, "dam-pry-2018").fallbackToDestructiveMigration()
+                AppDatabase.class, "AppDatabase").fallbackToDestructiveMigration()
                 .build();
         categoriaDAO = db.categoriaDAO();
     }
