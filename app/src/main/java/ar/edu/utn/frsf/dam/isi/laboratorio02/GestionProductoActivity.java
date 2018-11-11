@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.CategoriaRepository;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRetrofit;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
@@ -37,8 +39,11 @@ public class GestionProductoActivity extends AppCompatActivity {
     private Boolean flagActualizacion;
     private ArrayAdapter<Categoria> comboAdapter;
 
-    private Call<Producto> call;
-    private ProductoRetrofit clienteRest;
+    //private Call<Producto> call;
+    //private ProductoRetrofit clienteRest;
+
+    private CategoriaRepository categoriaRepository = new CategoriaRepository(this);
+    private ProductoRepository productoRepository = new ProductoRepository(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +67,7 @@ public class GestionProductoActivity extends AppCompatActivity {
 
         setearCategorias();
 
-        clienteRest = RestClient.getInstance().getRetrofit().create(ProductoRetrofit.class);
+        //clienteRest = RestClient.getInstance().getRetrofit().create(ProductoRetrofit.class);
 
         opcionNuevoBusqueda.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -77,7 +82,7 @@ public class GestionProductoActivity extends AppCompatActivity {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                call = null;
+                //call = null;
 
                 //Creacion del producto con los datos seteados
                 final Producto p = new Producto();
@@ -95,18 +100,20 @@ public class GestionProductoActivity extends AppCompatActivity {
                 });
 
                 if(flagActualizacion){
-                    call = clienteRest.actualizarProducto(Integer.parseInt(idProductoBuscar.getText().toString()), p);
+                    //call = clienteRest.actualizarProducto(Integer.parseInt(idProductoBuscar.getText().toString()), p);
+                    productoRepository.actualizarProducto(p);
 
                     Toast.makeText(GestionProductoActivity.this, "El producto ha sido actualizado", Toast.LENGTH_SHORT).show();
                 }
                 else{
 
-                    call= clienteRest.crearProducto(p);
+                    //call= clienteRest.crearProducto(p);
+                    productoRepository.crearProducto(p);
 
                     Toast.makeText(GestionProductoActivity.this, "El nuevo producto ha sido guardado", Toast.LENGTH_SHORT).show();
                 }
 
-                call.enqueue(new Callback<Producto>() {
+                /*call.enqueue(new Callback<Producto>() {
                     @Override
                     public void onResponse(Call<Producto> call, Response<Producto> resp) {
                         // procesar la respuesta
@@ -121,7 +128,7 @@ public class GestionProductoActivity extends AppCompatActivity {
                     public void onFailure(Call<Producto> call, Throwable t) {
                         System.out.println(t.getCause().toString());
                     }
-                });
+                });*/
 
                 nombreProducto.setText("");
                 descProducto.setText("");
@@ -133,7 +140,7 @@ public class GestionProductoActivity extends AppCompatActivity {
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                call = clienteRest.buscarProductoPorId(Integer.parseInt(idProductoBuscar.getText().toString()));
+                /*call = clienteRest.buscarProductoPorId(Integer.parseInt(idProductoBuscar.getText().toString()));
 
                 call.enqueue(new Callback<Producto>() {
                     @Override
@@ -148,11 +155,13 @@ public class GestionProductoActivity extends AppCompatActivity {
                     public void onFailure(Call<Producto> call, Throwable t) {
                         System.out.println(t.getCause().toString());
                     }
-                });
+                });*/
 
-                nombreProducto.setText("");
-                descProducto.setText("");
-                precioProducto.setText("");
+                Producto producto = productoRepository.buscarPorId(Integer.parseInt(idProductoBuscar.getText().toString()));
+
+                nombreProducto.setText(producto.getNombre());
+                descProducto.setText(producto.getDescripcion());
+                precioProducto.setText(producto.getPrecio().toString());
                 comboCategorias.setSelection(0);
             }
         });
@@ -160,7 +169,7 @@ public class GestionProductoActivity extends AppCompatActivity {
         btnBorrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                call = clienteRest.borrar(Integer.parseInt(idProductoBuscar.getText().toString()));
+                /*call = clienteRest.borrar(Integer.parseInt(idProductoBuscar.getText().toString()));
 
                 Toast.makeText(GestionProductoActivity.this, "El producto con id " + idProductoBuscar.getText().toString() + " ha sido borrado", Toast.LENGTH_SHORT).show();
 
@@ -174,7 +183,12 @@ public class GestionProductoActivity extends AppCompatActivity {
                     public void onFailure(Call<Producto> call, Throwable t) {
                         System.out.println(t.getCause().toString());
                     }
-                });
+                });*/
+
+                Producto producto = productoRepository.buscarPorId(Integer.parseInt(idProductoBuscar.getText().toString()));
+                productoRepository.eliminarProducto(producto);
+
+                Toast.makeText(GestionProductoActivity.this, "El producto con id " + idProductoBuscar.getText().toString() + " ha sido borrado", Toast.LENGTH_SHORT).show();
 
                 nombreProducto.setText("");
                 descProducto.setText("");
@@ -185,7 +199,7 @@ public class GestionProductoActivity extends AppCompatActivity {
     }
 
     public void setearCategorias(){
-        Runnable r = new Runnable() {
+        /*Runnable r = new Runnable() {
             @Override public void run() {
                 CategoriaRest catRest = new CategoriaRest();
                 Categoria[] cats = catRest.listarTodas().toArray(new Categoria[0]);
@@ -204,6 +218,12 @@ public class GestionProductoActivity extends AppCompatActivity {
             }
         };
         Thread hiloCargarCombo = new Thread(r);
-        hiloCargarCombo.start();
+        hiloCargarCombo.start();*/
+
+        final List<Categoria> listaCategoria = categoriaRepository.listarCategorias();
+
+        comboAdapter = new ArrayAdapter<Categoria>(GestionProductoActivity.this, android.R.layout.simple_spinner_dropdown_item, listaCategoria);
+        comboCategorias.setAdapter(comboAdapter);
+        comboCategorias.setSelection(0);
     }
 }

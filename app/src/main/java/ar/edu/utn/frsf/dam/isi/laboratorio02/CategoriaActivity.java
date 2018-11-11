@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.CategoriaRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 
 public class CategoriaActivity extends AppCompatActivity {
@@ -15,6 +16,7 @@ public class CategoriaActivity extends AppCompatActivity {
     private EditText textoCat;
     private Button btnCrear;
     private Button btnMenu;
+    private CategoriaRepository categoriaRepository = new CategoriaRepository(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +29,7 @@ public class CategoriaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // completer el codigo en el paso “f”
                 final Categoria categoria = new Categoria(textoCat.getText().toString());
-                final CategoriaRest categoriaRest = new CategoriaRest();
+                /*final CategoriaRest categoriaRest = new CategoriaRest();
 
                 Runnable r = new Runnable() {
                     @Override
@@ -41,7 +43,9 @@ public class CategoriaActivity extends AppCompatActivity {
                     }
                 };
                 Thread unHilo = new Thread(r);
-                unHilo.start();
+                unHilo.start();*/
+
+                categoriaRepository.crearCategoria(categoria);
 
                 Toast.makeText(CategoriaActivity.this, "La categoría " + textoCat.getText().toString() + " ha sido creada", Toast.LENGTH_SHORT).show();
 

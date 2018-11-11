@@ -18,10 +18,10 @@ public interface CategoriaDAO{
     public void actualizarCategoria (Categoria categoria);
     @Delete
     public void eliminarCategoria(Categoria categoria);
-    @Query("SELECT * FROM Categoria WHERE idCategoria")
-    public Categoria obtenerCategoria(int idCategoria);
-    @Query("SELECT * FROM Categoria WHERE nombreCategoria")
-    public Categoria obtenerCategoria(String nombreCategoria);
+    @Query("SELECT * FROM Categoria WHERE idCategoria = :id")
+    public Categoria obtenerCategoria(int id);
+    @Query("SELECT * FROM Categoria WHERE nombreCategoria = :nombre")
+    public Categoria obtenerCategoria(String nombre);
     @Query("SELECT * FROM Categoria")
     public List<Categoria> listarCategorias();
 }
