@@ -35,6 +35,8 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
     private boolean bandera; //false si viene desde el menu principal, true si viene desde la pantalla de un nuevo pedido
     public List<PedidoDetalle> listaPedidoDetalle;
 
+    private List<Producto> listaProductos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,8 +96,19 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
         edtProdCantidad = (EditText) findViewById(R.id.edtProdCantidad);
         btnProdAddPedido = (Button) findViewById(R.id.btnProdAddPedido);
 
-        repositorioProductos = new ProductoRepository(this);
+        categoriaRepository = new CategoriaRepository(getApplicationContext());
+        repositorioProductos = new ProductoRepository(getApplicationContext());
         listaPedidoDetalle = new ArrayList<PedidoDetalle>();
+
+        listaProductos = new ArrayList<Producto>();
+        for(Producto p: repositorioProductos.getLista()){
+            p = p;
+            if(p.getCategoria() != null){
+                if(p.getCategoria().getNombre().equals(catSeleccionada.getNombre())){
+                    listaProductos.add(p);
+                }
+            }
+        }
     }
 
     private void setearAdaptadorProductos(){
@@ -111,7 +124,9 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
             {
                 catSeleccionada = adaptadorSpinnerCategorias.getItem(position);
 
-                adaptadorListaProductos = new ArrayAdapter<Producto>(ProductosRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, repositorioProductos.buscarPorCategoria(catSeleccionada.getNombre()));
+                //List<Producto> listaProductos = repositorioProductos.buscarPorCategoria(catSeleccionada);
+
+                adaptadorListaProductos = new ArrayAdapter<Producto>(ProductosRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, listaProductos);
                 lstProductos.setAdapter(adaptadorListaProductos);
 
                 //Cada vez que se cambia de categoria, se deshabilita el boton y el editText
@@ -133,7 +148,8 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
         lstProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                idProductoSeleccionado = repositorioProductos.buscarPorCategoria(catSeleccionada.getNombre()).get(position).getId();
+                //List<Producto> listaProductos = repositorioProductos.buscarPorCategoria(catSeleccionada);
+                idProductoSeleccionado = listaProductos.get(position).getId();
 
                 if(bandera){
                     edtProdCantidad.setEnabled(true);

@@ -18,7 +18,7 @@ public class ProductoRepository{
     private ProductoDAO productoDAO;
     public ProductoRepository(Context ctx){
         AppDatabase db = Room.databaseBuilder(ctx,
-                AppDatabase.class, "AppDatabase").fallbackToDestructiveMigration()
+                AppDatabase.class, "bd_lab")
                 .allowMainThreadQueries()
                 .build();
         productoDAO = db.productoDAO();
@@ -49,8 +49,9 @@ public class ProductoRepository{
         return productoDAO.getLista();
     }
 
-    public List<Producto> buscarPorCategoria(String cat){
-        return productoDAO.buscarPorCategoria(cat);
+    public List<Producto> buscarPorCategoria(Categoria cat){
+        System.out.println(cat.getNombre());
+        return productoDAO.buscarPorCategoria(cat.getNombre());
     }
 
     /*private static List<Producto> LISTA_PRODUCTOS = new ArrayList<>();

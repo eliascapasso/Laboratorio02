@@ -23,6 +23,6 @@ public interface ProductoDAO {
     public Producto buscarPorId(Integer id);
     @Query("SELECT * FROM Producto")
     public List<Producto> getLista();
-    @Query("SELECT * FROM Producto WHERE catnombreCategoria = :categoria")
+    @Query("SELECT * FROM Producto WHERE cat_nombreCategoria = :categoria")
     public List<Producto> buscarPorCategoria(String categoria);
 }

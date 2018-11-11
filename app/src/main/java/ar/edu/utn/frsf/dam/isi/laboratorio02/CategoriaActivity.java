@@ -1,5 +1,6 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,12 +17,15 @@ public class CategoriaActivity extends AppCompatActivity {
     private EditText textoCat;
     private Button btnCrear;
     private Button btnMenu;
-    private CategoriaRepository categoriaRepository = new CategoriaRepository(this);
+    private CategoriaRepository categoriaRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categoria);
+
+        categoriaRepository = new CategoriaRepository(getApplicationContext());
+
         textoCat = (EditText) findViewById(R.id.txtNombreCategoria);
         btnCrear = (Button) findViewById(R.id.btnCrearCategoria);
         btnCrear.setOnClickListener(new View.OnClickListener() {
@@ -29,7 +33,7 @@ public class CategoriaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // completer el codigo en el paso “f”
                 final Categoria categoria = new Categoria(textoCat.getText().toString());
-                /*final CategoriaRest categoriaRest = new CategoriaRest();
+                //final CategoriaRest categoriaRest = new CategoriaRest();
 
                 Runnable r = new Runnable() {
                     @Override
@@ -37,15 +41,14 @@ public class CategoriaActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                categoriaRest.crearCategoria(categoria);
+                                //categoriaRest.crearCategoria(categoria);
+                                categoriaRepository.crearCategoria(categoria);
                             }
                         });
                     }
                 };
                 Thread unHilo = new Thread(r);
-                unHilo.start();*/
-
-                categoriaRepository.crearCategoria(categoria);
+                unHilo.start();
 
                 Toast.makeText(CategoriaActivity.this, "La categoría " + textoCat.getText().toString() + " ha sido creada", Toast.LENGTH_SHORT).show();
 

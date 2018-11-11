@@ -42,13 +42,18 @@ public class GestionProductoActivity extends AppCompatActivity {
     //private Call<Producto> call;
     //private ProductoRetrofit clienteRest;
 
-    private CategoriaRepository categoriaRepository = new CategoriaRepository(this);
-    private ProductoRepository productoRepository = new ProductoRepository(this);
+    private CategoriaRepository categoriaRepository;
+    private ProductoRepository productoRepository;
+    private Producto p = new Producto();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gestion_producto);
+
+        categoriaRepository = new CategoriaRepository(getApplicationContext());
+        productoRepository = new ProductoRepository(getApplicationContext());
+
         flagActualizacion = false;
         opcionNuevoBusqueda = (ToggleButton) findViewById(R.id.abmProductoAltaNuevo);
         idProductoBuscar = (EditText) findViewById(R.id.abmProductoIdBuscar);
@@ -79,25 +84,30 @@ public class GestionProductoActivity extends AppCompatActivity {
         }
         });
 
+        comboCategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                p.setCategoria(new Categoria(comboCategorias.getItemAtPosition(position).toString()));
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //call = null;
 
                 //Creacion del producto con los datos seteados
-                final Producto p = new Producto();
                 p.setNombre(nombreProducto.getText().toString());
                 p.setDescripcion(descProducto.getText().toString());
                 p.setPrecio(Double.parseDouble(precioProducto.getText().toString()));
-                comboCategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        p.setCategoria(new Categoria(comboCategorias.getItemAtPosition(position).toString()));
-                    }
-                    @Override public void onNothingSelected(AdapterView<?> parent) {
 
-                    }
-                });
+                Categoria c = new Categoria("Categoria1");
+                p.setCategoria(c);
+
+
 
                 if(flagActualizacion){
                     //call = clienteRest.actualizarProducto(Integer.parseInt(idProductoBuscar.getText().toString()), p);
@@ -108,7 +118,20 @@ public class GestionProductoActivity extends AppCompatActivity {
                 else{
 
                     //call= clienteRest.crearProducto(p);
-                    productoRepository.crearProducto(p);
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //categoriaRest.crearCategoria(categoria);
+                                    productoRepository.crearProducto(p);
+                                }
+                            });
+                        }
+                    };
+                    Thread unHilo = new Thread(r);
+                    unHilo.start();
 
                     Toast.makeText(GestionProductoActivity.this, "El nuevo producto ha sido guardado", Toast.LENGTH_SHORT).show();
                 }

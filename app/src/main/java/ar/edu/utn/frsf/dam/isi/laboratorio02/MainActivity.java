@@ -15,6 +15,7 @@ import java.util.List;
 
 import ar.edu.utn.frsf.dam.isi.laboratorio02.Servicios.PrepararPedidoService;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.AppDatabase;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 
@@ -32,11 +33,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "AppDatabase").fallbackToDestructiveMigration()
-                .allowMainThreadQueries()
-                .build();
 
         createNotificationChannel();
 

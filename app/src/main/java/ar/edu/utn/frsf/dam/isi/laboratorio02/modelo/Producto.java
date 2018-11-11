@@ -3,12 +3,14 @@ package ar.edu.utn.frsf.dam.isi.laboratorio02.modelo;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import java.util.Objects;
 
 @Entity(tableName ="Producto")
+
 public class Producto {
 
     @PrimaryKey(autoGenerate = true)
@@ -21,7 +23,7 @@ public class Producto {
     private String descripcion;
     @ColumnInfo(name = "precioProducto")
     private Double precio;
-    @Embedded(prefix = "cat")
+    @Embedded(prefix = "cat_")
     private Categoria categoria;
 
     public  Producto(){
