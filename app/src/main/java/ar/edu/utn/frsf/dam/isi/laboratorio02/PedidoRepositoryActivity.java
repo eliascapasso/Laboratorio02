@@ -117,8 +117,8 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         lblCostoTotalPedido = (TextView)findViewById(R.id.lblCostoTotalPedido);
 
         unPedido = new Pedido();
-        repositorioPedido = new PedidoRepository();
-        repositorioProducto = new ProductoRepository(this);
+        repositorioPedido = new PedidoRepository(getApplicationContext());
+        repositorioProducto = new ProductoRepository(getApplicationContext());
         listaPedidoDetalle = new ArrayList<PedidoDetalle>();
 
         inicializaDatosPedidoDesdeHitorial();
@@ -189,7 +189,6 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     }
 
     private void quitarProducto(){
-
         lstPedidos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

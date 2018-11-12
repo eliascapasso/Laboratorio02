@@ -8,20 +8,19 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.PedidoDetalle;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
 
 @Dao
-public interface ProductoDAO {
+public interface PedidoDetalleDAO {
     @Insert
-    public void crearProducto(Producto producto);
+    public void crearDetalle(PedidoDetalle detalle);
     @Update
-    public void actualizarProducto(Producto producto);
+    public void actualizarDetalle(PedidoDetalle detalle);
     @Delete
-    public void eliminarProducto(Producto producto);
+    public void eliminarDetalle(PedidoDetalle detalle);
     @Query("SELECT * FROM Producto WHERE idProducto = :id")
-    public Producto buscarPorId(Integer id);
+    public PedidoDetalle buscarPorId(Integer id);
     @Query("SELECT * FROM Producto")
-    public List<Producto> getLista();
-    @Query("SELECT * FROM Producto WHERE cat_nombreCategoria = :categoria")
-    public List<Producto> buscarPorCategoria(String categoria);
+    public List<PedidoDetalle> getLista();
 }

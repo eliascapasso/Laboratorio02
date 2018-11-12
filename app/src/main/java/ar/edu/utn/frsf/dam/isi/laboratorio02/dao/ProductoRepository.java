@@ -16,6 +16,7 @@ public class ProductoRepository{
 
     private static ProductoRepository _REPO= null;
     private ProductoDAO productoDAO;
+
     public ProductoRepository(Context ctx){
         AppDatabase db = Room.databaseBuilder(ctx,
                 AppDatabase.class, "bd_lab")
