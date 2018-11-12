@@ -51,6 +51,7 @@ public class ProductoRepository{
 
     public List<Producto> buscarPorCategoria(Categoria cat){
         System.out.println(cat.getNombre());
+
         return productoDAO.buscarPorCategoria(cat.getNombre());
     }
 

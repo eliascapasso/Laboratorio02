@@ -99,16 +99,6 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
         categoriaRepository = new CategoriaRepository(getApplicationContext());
         repositorioProductos = new ProductoRepository(getApplicationContext());
         listaPedidoDetalle = new ArrayList<PedidoDetalle>();
-
-        listaProductos = new ArrayList<Producto>();
-        for(Producto p: repositorioProductos.getLista()){
-            p = p;
-            if(p.getCategoria() != null){
-                if(p.getCategoria().getNombre().equals(catSeleccionada.getNombre())){
-                    listaProductos.add(p);
-                }
-            }
-        }
     }
 
     private void setearAdaptadorProductos(){
@@ -124,7 +114,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
             {
                 catSeleccionada = adaptadorSpinnerCategorias.getItem(position);
 
-                //List<Producto> listaProductos = repositorioProductos.buscarPorCategoria(catSeleccionada);
+                listaProductos = repositorioProductos.buscarPorCategoria(catSeleccionada);
 
                 adaptadorListaProductos = new ArrayAdapter<Producto>(ProductosRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, listaProductos);
                 lstProductos.setAdapter(adaptadorListaProductos);
@@ -148,7 +138,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
         lstProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //List<Producto> listaProductos = repositorioProductos.buscarPorCategoria(catSeleccionada);
+                listaProductos = repositorioProductos.buscarPorCategoria(catSeleccionada);
                 idProductoSeleccionado = listaProductos.get(position).getId();
 
                 if(bandera){

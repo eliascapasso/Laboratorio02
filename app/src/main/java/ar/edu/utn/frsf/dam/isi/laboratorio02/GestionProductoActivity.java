@@ -84,16 +84,6 @@ public class GestionProductoActivity extends AppCompatActivity {
         }
         });
 
-        comboCategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                p.setCategoria(new Categoria(comboCategorias.getItemAtPosition(position).toString()));
-            }
-            @Override public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,8 +93,8 @@ public class GestionProductoActivity extends AppCompatActivity {
                 p.setNombre(nombreProducto.getText().toString());
                 p.setDescripcion(descProducto.getText().toString());
                 p.setPrecio(Double.parseDouble(precioProducto.getText().toString()));
-
-                Categoria c = new Categoria("Categoria1");
+                //Obtiene la categoria seleccionada
+                Categoria c = comboAdapter.getItem(comboCategorias.getSelectedItemPosition());
                 p.setCategoria(c);
 
 
