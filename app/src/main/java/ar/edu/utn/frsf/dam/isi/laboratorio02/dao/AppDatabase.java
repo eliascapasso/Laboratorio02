@@ -8,10 +8,12 @@ import android.arch.persistence.room.RoomDatabase;
 import android.support.annotation.NonNull;
 
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
 
-@Database(entities = {Categoria.class}, version = 1)
+@Database(entities = {Categoria.class, Producto.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract CategoriaDAO categoriaDAO();
+    public abstract ProductoDAO productoDAO();
 
     @NonNull
     @Override

@@ -2,6 +2,7 @@ package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 import java.util.List;
 
 import ar.edu.utn.frsf.dam.isi.laboratorio02.Servicios.PrepararPedidoService;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.AppDatabase;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 

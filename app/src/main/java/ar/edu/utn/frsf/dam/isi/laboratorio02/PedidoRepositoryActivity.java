@@ -118,7 +118,7 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
 
         unPedido = new Pedido();
         repositorioPedido = new PedidoRepository();
-        repositorioProducto = new ProductoRepository();
+        repositorioProducto = new ProductoRepository(this);
         listaPedidoDetalle = new ArrayList<PedidoDetalle>();
 
         inicializaDatosPedidoDesdeHitorial();

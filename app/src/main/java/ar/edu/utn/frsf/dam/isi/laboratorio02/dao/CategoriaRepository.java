@@ -5,14 +5,17 @@ import android.content.Context;
 
 import java.util.List;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.MainActivity;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 
 public class CategoriaRepository {
     private static CategoriaRepository _REPO= null;
     private CategoriaDAO categoriaDAO;
-    private CategoriaRepository(Context ctx){
+    public CategoriaRepository(Context ctx){
         AppDatabase db = Room.databaseBuilder(ctx,
-                AppDatabase.class, "AppDatabase").fallbackToDestructiveMigration()
+                AppDatabase.class, "bd_lab")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
                 .build();
         categoriaDAO = db.categoriaDAO();
     }
