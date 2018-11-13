@@ -1,19 +1,38 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02.modelo;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Pedido {
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.Conversores.EstadoConverter;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.Conversores.FechaConverter;
 
+@Entity(tableName ="Pedido")
+public class Pedido {
     public enum Estado { REALIZADO, ACEPTADO, RECHAZADO,EN_PREPARACION,LISTO,ENTREGADO,CANCELADO}
 
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    @ColumnInfo(name = "idPedido")
     private Integer id;
+    @TypeConverters(FechaConverter.class)
     private Date fecha;
+    @Ignore
     private List<PedidoDetalle> detalle;
+    @TypeConverters(EstadoConverter.class)
     private Estado estado;
+    @ColumnInfo(name = "dirEnvioPedido")
     private String direccionEnvio;
+    @ColumnInfo(name = "mailContactoPedido")
     private String mailContacto;
+    @ColumnInfo(name = "retiraPedido")
     private Boolean retirar;
 
     public String getDireccionEnvio() {
@@ -44,6 +63,7 @@ public class Pedido {
         this.detalle =new ArrayList<>();
     }
 
+    @Ignore
     public Pedido(Date fecha, List<PedidoDetalle> detalle, Estado estado, String direccionEnvio, String mailContacto, Boolean retirar) {
         this();
         this.fecha = fecha;
@@ -54,6 +74,7 @@ public class Pedido {
         this.retirar = retirar;
     }
 
+    @Ignore
     public Pedido(Date fecha, Estado estado) {
         this();
         this.fecha = fecha;

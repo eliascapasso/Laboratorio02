@@ -1,20 +1,16 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -29,8 +25,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.Preferences;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoDetalleRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
@@ -57,6 +53,8 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     private Pedido unPedido;
     private PedidoRepository repositorioPedido;
     private ProductoRepository repositorioProducto;
+    private PedidoDetalleRepository repositorioDetalle;
+
     private ArrayAdapter<PedidoDetalle> adaptadorListaPedidos;
     private List<PedidoDetalle> listaPedidoDetalle;
     private int posicionProductoSeleccionado;
@@ -117,8 +115,11 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
         lblCostoTotalPedido = (TextView)findViewById(R.id.lblCostoTotalPedido);
 
         unPedido = new Pedido();
-        repositorioPedido = new PedidoRepository();
-        repositorioProducto = new ProductoRepository();
+
+        repositorioPedido = new PedidoRepository(getApplicationContext());
+        repositorioProducto = new ProductoRepository(getApplicationContext());
+        repositorioDetalle = new PedidoDetalleRepository(getApplicationContext());
+
         listaPedidoDetalle = new ArrayList<PedidoDetalle>();
 
         inicializaDatosPedidoDesdeHitorial();
@@ -189,7 +190,6 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
     }
 
     private void quitarProducto(){
-
         lstPedidos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -223,6 +223,10 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
                     setearDatosPedido(hora);
 
                     repositorioPedido.guardarPedido(unPedido);
+                    for(PedidoDetalle detalle: unPedido.getDetalle()){
+                        repositorioDetalle.guardarDetalle(detalle);
+                    }
+
                     Log.d("APP_LAB02", "Pedido realizado: " + unPedido.toString());
                     // lo seteamos a una nueva instancia para el proximo pedido
                     unPedido = new Pedido();
@@ -251,9 +255,15 @@ public class PedidoRepositoryActivity extends AppCompatActivity {
                 }
                 // buscar pedidos no aceptados y aceptarlos utomáticamente
                 List<Pedido> lista = repositorioPedido.getLista();
-                for(Pedido p:lista){
-                    if(p.getEstado().equals(Pedido.Estado.REALIZADO))
+                for(Pedido p: lista){
+                    if(p.getEstado().equals(Pedido.Estado.REALIZADO)){
                         p.setEstado(Pedido.Estado.ACEPTADO);
+
+                        repositorioPedido.actualizarPedido(p);
+                        for(PedidoDetalle detalle: unPedido.getDetalle()){
+                            repositorioDetalle.guardarDetalle(detalle);
+                        }
+                    }
 
                     //envia el broadcastreciver
                     Intent intent = new Intent(PedidoRepositoryActivity.this, EstadoPedidoReceiver.class);

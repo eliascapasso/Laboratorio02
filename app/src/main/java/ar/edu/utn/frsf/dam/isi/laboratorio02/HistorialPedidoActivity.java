@@ -38,7 +38,7 @@ public class HistorialPedidoActivity extends AppCompatActivity {
 
         setearAdaptadorHistorial();
 
-        clickLargoEnPedido(); //TODO: no funciona con lista personalizada
+        clickLargoEnPedido();
 
         verDetallePedido();
     }
@@ -48,7 +48,7 @@ public class HistorialPedidoActivity extends AppCompatActivity {
         btnHistorialNuevo = (Button) findViewById(R.id.btnHistorialNuevo);
         btnHistorialMenu = (Button) findViewById(R.id.btnHistorialMenu);
 
-        pedidoRepository = new PedidoRepository();
+        pedidoRepository = new PedidoRepository(getApplicationContext());
         listaPedidos = new ArrayList<Pedido>();
         listaPedidos.addAll(pedidoRepository.getLista());
     }

@@ -16,7 +16,7 @@ public class EstadoPedidoReceiver extends BroadcastReceiver {
     public static String ESTADO_ACEPTADO = "ACEPTADO";
     public static String ESTADO_EN_PREPARACION = "EN_PREPARACION";
 
-    private PedidoRepository pedidoRepository = new PedidoRepository();
+    private PedidoRepository pedidoRepository;
     private Pedido unPedido;
 
 
@@ -25,6 +25,7 @@ public class EstadoPedidoReceiver extends BroadcastReceiver {
         // TODO: This method is called when the BroadcastReceiver is receiving
         Bundle extras = intent.getExtras();
         int idPedido = extras.getInt("idPedido");
+        pedidoRepository = new PedidoRepository(context);
 
         unPedido = pedidoRepository.buscarPorId(idPedido);
 

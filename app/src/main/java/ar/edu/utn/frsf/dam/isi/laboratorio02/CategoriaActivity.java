@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.CategoriaRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 
 public class CategoriaActivity extends AppCompatActivity {
@@ -15,11 +16,15 @@ public class CategoriaActivity extends AppCompatActivity {
     private EditText textoCat;
     private Button btnCrear;
     private Button btnMenu;
+    private CategoriaRepository categoriaRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categoria);
+
+        categoriaRepository = new CategoriaRepository(getApplicationContext());
+
         textoCat = (EditText) findViewById(R.id.txtNombreCategoria);
         btnCrear = (Button) findViewById(R.id.btnCrearCategoria);
         btnCrear.setOnClickListener(new View.OnClickListener() {
@@ -27,7 +32,7 @@ public class CategoriaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // completer el codigo en el paso “f”
                 final Categoria categoria = new Categoria(textoCat.getText().toString());
-                final CategoriaRest categoriaRest = new CategoriaRest();
+                //final CategoriaRest categoriaRest = new CategoriaRest();
 
                 Runnable r = new Runnable() {
                     @Override
@@ -35,7 +40,8 @@ public class CategoriaActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                categoriaRest.crearCategoria(categoria);
+                                //categoriaRest.crearCategoria(categoria);
+                                categoriaRepository.crearCategoria(categoria);
                             }
                         });
                     }
