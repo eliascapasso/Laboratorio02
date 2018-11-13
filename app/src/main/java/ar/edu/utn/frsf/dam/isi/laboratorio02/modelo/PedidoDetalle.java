@@ -17,13 +17,13 @@ public class PedidoDetalle {
     private Integer id;
     @ColumnInfo(name = "cantidadDetalle")
     private Integer cantidad;
-    @Embedded(prefix = "producto_")
+    @Embedded(prefix = "prod_")
     private Producto producto;
-    @Embedded(prefix = "pedido_")
+    @Embedded(prefix = "ped_")
     private Pedido pedido;
 
     public PedidoDetalle(Integer cantidad, Producto producto) {
-        id=ID_DETALLE++;
+        this.id=ID_DETALLE++;
         this.cantidad = cantidad;
         this.producto = producto;
     }

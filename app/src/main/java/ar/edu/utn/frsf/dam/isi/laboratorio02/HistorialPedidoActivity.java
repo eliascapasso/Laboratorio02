@@ -38,7 +38,7 @@ public class HistorialPedidoActivity extends AppCompatActivity {
 
         setearAdaptadorHistorial();
 
-        clickLargoEnPedido(); //TODO: no funciona con lista personalizada
+        clickLargoEnPedido();
 
         verDetallePedido();
     }

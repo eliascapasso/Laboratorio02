@@ -24,8 +24,8 @@ public class PedidoDetalleRepository {
         return _REPO;
     }
 
-    public void crearDetalle(PedidoDetalle detalle){
-        pedidoDetalleDAO.crearDetalle(detalle);
+    public void guardarDetalle(PedidoDetalle detalle){
+        pedidoDetalleDAO.guardarDetalle(detalle);
     }
 
     public void actualizarDetalle(PedidoDetalle detalle){

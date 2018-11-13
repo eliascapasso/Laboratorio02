@@ -2,6 +2,7 @@ package ar.edu.utn.frsf.dam.isi.laboratorio02.modelo;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -22,11 +23,9 @@ public class Categoria {
         this.nombre = nombre;
     }
 
+    @Ignore
     public Categoria(String nombre) {
         this.nombre = nombre;
-    }
-
-    public Categoria() {
     }
 
     public Integer getId() {

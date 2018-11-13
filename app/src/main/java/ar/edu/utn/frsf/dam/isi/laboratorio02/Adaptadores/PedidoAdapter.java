@@ -14,17 +14,20 @@ import java.util.List;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.FilaHistorialActivity;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.PedidoRepositoryActivity;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.R;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 
 public class PedidoAdapter extends ArrayAdapter{
     private Context contexto;
     private List<Pedido> listaPedidos;
     private PedidoHolder pedidoHolder;
+    private PedidoRepository pedidoRepository;
 
     public PedidoAdapter(Context context, List<Pedido> objects) {
         super(context, 0, objects);
         this.contexto = context;
         this.listaPedidos = objects;
+        pedidoRepository = new PedidoRepository(context);
     }
 
     @Override
@@ -144,6 +147,7 @@ public class PedidoAdapter extends ArrayAdapter{
                     Log.d("APP_LAB02", "Cancela el pedido");
 
                     pedidoSeleccionado.setEstado(Pedido.Estado.CANCELADO);
+                    pedidoRepository.actualizarPedido(pedidoSeleccionado);
 
                     PedidoAdapter.this.notifyDataSetChanged();
                 }

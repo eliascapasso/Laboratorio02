@@ -23,12 +23,10 @@ public class Pedido {
     @ColumnInfo(name = "idPedido")
     private Integer id;
     @TypeConverters(FechaConverter.class)
-    @ColumnInfo(name = "fechaPedido")
     private Date fecha;
     @Ignore
     private List<PedidoDetalle> detalle;
     @TypeConverters(EstadoConverter.class)
-    @ColumnInfo(name = "estadoPedido")
     private Estado estado;
     @ColumnInfo(name = "dirEnvioPedido")
     private String direccionEnvio;
@@ -65,6 +63,7 @@ public class Pedido {
         this.detalle =new ArrayList<>();
     }
 
+    @Ignore
     public Pedido(Date fecha, List<PedidoDetalle> detalle, Estado estado, String direccionEnvio, String mailContacto, Boolean retirar) {
         this();
         this.fecha = fecha;
@@ -75,6 +74,7 @@ public class Pedido {
         this.retirar = retirar;
     }
 
+    @Ignore
     public Pedido(Date fecha, Estado estado) {
         this();
         this.fecha = fecha;
