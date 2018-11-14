@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.CategoriaRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.PedidoDetalle;
@@ -26,12 +27,15 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
     private EditText edtProdCantidad;
     private Button btnProdAddPedido;
     private ProductoRepository repositorioProductos;
+    private CategoriaRepository categoriaRepository;
     private ArrayAdapter<Categoria> adaptadorSpinnerCategorias;
     private ArrayAdapter<Producto> adaptadorListaProductos;
     private Categoria catSeleccionada;
     private int idProductoSeleccionado;
     private boolean bandera; //false si viene desde el menu principal, true si viene desde la pantalla de un nuevo pedido
     public List<PedidoDetalle> listaPedidoDetalle;
+
+    private List<Producto> listaProductos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +44,11 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
 
         inicializaAtributos();
 
-        //setearAdaptadorProductos();
+        setearAdaptadorProductos();
 
-        //seleccionCategoria();
+        seleccionCategoria();
 
-        Runnable r = new Runnable() {
+        /*Runnable r = new Runnable() {
             @Override public void run() {
                 CategoriaRest catRest = new CategoriaRest();
                 Categoria[] cats = catRest.listarTodas().toArray(new Categoria[0]);
@@ -77,7 +81,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
             }
         };
         Thread hiloCargarCombo = new Thread(r);
-        hiloCargarCombo.start();
+        hiloCargarCombo.start();*/
 
         setearIDProducto();
 
@@ -92,12 +96,13 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
         edtProdCantidad = (EditText) findViewById(R.id.edtProdCantidad);
         btnProdAddPedido = (Button) findViewById(R.id.btnProdAddPedido);
 
-        repositorioProductos = new ProductoRepository();
+        categoriaRepository = new CategoriaRepository(getApplicationContext());
+        repositorioProductos = new ProductoRepository(getApplicationContext());
         listaPedidoDetalle = new ArrayList<PedidoDetalle>();
     }
 
     private void setearAdaptadorProductos(){
-        adaptadorSpinnerCategorias = new ArrayAdapter<Categoria>(this, android.R.layout.simple_spinner_item, repositorioProductos.getCategorias());
+        adaptadorSpinnerCategorias = new ArrayAdapter<Categoria>(this, android.R.layout.simple_spinner_item, categoriaRepository.listarCategorias());
         cmbProductosCategoria.setAdapter(adaptadorSpinnerCategorias);
     }
 
@@ -109,7 +114,9 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
             {
                 catSeleccionada = adaptadorSpinnerCategorias.getItem(position);
 
-                adaptadorListaProductos = new ArrayAdapter<Producto>(ProductosRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, repositorioProductos.buscarPorCategoria(catSeleccionada));
+                listaProductos = repositorioProductos.buscarPorCategoria(catSeleccionada);
+
+                adaptadorListaProductos = new ArrayAdapter<Producto>(ProductosRepositoryActivity.this, android.R.layout.simple_list_item_single_choice, listaProductos);
                 lstProductos.setAdapter(adaptadorListaProductos);
 
                 //Cada vez que se cambia de categoria, se deshabilita el boton y el editText
@@ -122,7 +129,7 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parentView)
             {
-                catSeleccionada = repositorioProductos.getCategorias().get(0);
+                catSeleccionada = categoriaRepository.listarCategorias().get(0);
             }
         });
     }
@@ -131,7 +138,8 @@ public class ProductosRepositoryActivity extends AppCompatActivity {
         lstProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                idProductoSeleccionado = repositorioProductos.buscarPorCategoria(catSeleccionada).get(position).getId();
+                listaProductos = repositorioProductos.buscarPorCategoria(catSeleccionada);
+                idProductoSeleccionado = listaProductos.get(position).getId();
 
                 if(bandera){
                     edtProdCantidad.setEnabled(true);

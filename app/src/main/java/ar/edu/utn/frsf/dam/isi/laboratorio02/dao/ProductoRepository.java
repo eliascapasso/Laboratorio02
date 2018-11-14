@@ -1,5 +1,7 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02.dao;
 
+import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +14,48 @@ import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
 
 public class ProductoRepository{
 
-    private static List<Producto> LISTA_PRODUCTOS = new ArrayList<>();
+    private static ProductoRepository _REPO= null;
+    private ProductoDAO productoDAO;
+    public ProductoRepository(Context ctx){
+        AppDatabase db = Room.databaseBuilder(ctx,
+                AppDatabase.class, "bd_lab")
+                .allowMainThreadQueries()
+                .build();
+        productoDAO = db.productoDAO();
+    }
+
+    public static ProductoRepository getInstance(Context ctx){
+        if(_REPO==null) _REPO = new ProductoRepository(ctx);
+        return _REPO;
+    }
+
+    public void crearProducto(Producto producto){
+        productoDAO.crearProducto(producto);
+    }
+
+    public void actualizarProducto(Producto producto){
+        productoDAO.actualizarProducto(producto);
+    }
+
+    public void eliminarProducto(Producto producto){
+        productoDAO.eliminarProducto(producto);
+    }
+
+    public Producto buscarPorId(Integer idProducto){
+        return productoDAO.buscarPorId(idProducto);
+    }
+
+    public List<Producto> getLista(){
+        return productoDAO.getLista();
+    }
+
+    public List<Producto> buscarPorCategoria(Categoria cat){
+        System.out.println(cat.getNombre());
+
+        return productoDAO.buscarPorCategoria(cat.getNombre());
+    }
+
+    /*private static List<Producto> LISTA_PRODUCTOS = new ArrayList<>();
     private static List<Categoria> CATEGORIAS_PRODUCTOS = new ArrayList<>();
     private static boolean FLAG_INICIALIZADO = false;
 
@@ -23,7 +66,7 @@ public class ProductoRepository{
             CATEGORIAS_PRODUCTOS.add(new Categoria(2,"Plato Principal"));
             CATEGORIAS_PRODUCTOS.add(new Categoria(3,"Postre"));
             CATEGORIAS_PRODUCTOS.add(new Categoria(4,"Bebida"));
-        for(Categoria cat: CATEGORIAS_PRODUCTOS){ //TODO: Esto esta bien?? (el precio tira cualquiera)
+        for(Categoria cat: CATEGORIAS_PRODUCTOS){
             for(int i=0;i<25;i++){
                 LISTA_PRODUCTOS.add(new Producto(id++,cat.getNombre()+" 1"+i,"descripcion "+(i*id)+rand.nextInt(100),rand.nextDouble()*500,cat));
             }
@@ -56,5 +99,5 @@ public class ProductoRepository{
             if(p.getCategoria().getId().equals(cat.getId())) resultado.add(p);
         }
         return resultado;
-    }
+    }*/
 }
